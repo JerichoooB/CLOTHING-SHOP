@@ -1,0 +1,33 @@
+.shop-categories {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  height: auto;
+  overflow-x: auto;
+  padding: 0 0 20px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #deddd3;
+}
+.shop-categories a {
+  font-size: 12px;
+  white-space: nowrap;
+  padding: 10px 0;
+  color: #7a7d70;
+}
+.shop-categories a.selected {
+  color: #20241b;
+  border-bottom: 1px solid #3b4231;
+}
+.shop-categories a:after {
+  display: none !important;
+}
+@media (max-width: 600px) {
+  .shop-categories {
+    gap: 23px;
+    padding-bottom: 12px;
+    margin-bottom: 18px;
+  }
+  .shop-categories a {
+    font-size: 11px;
+  }
+}

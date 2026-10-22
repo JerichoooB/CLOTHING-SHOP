@@ -1,0 +1,34 @@
+.orders-page {
+  max-width: 1000px;
+  padding-top: 55px;
+  padding-bottom: 60px;
+  min-height: 65vh;
+}
+.orders-page > .eyebrow {
+  margin-bottom: 15px;
+}
+.orders-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  gap: 15px;
+}
+.orders-title h1 {
+  font-size: 52px;
+}
+.orders-title button {
+  font-size: 11px;
+  text-decoration: underline;
+}
+.orders-page > p {
+  margin-bottom: 22px;
+}
+@media (max-width: 600px) {
+  .orders-page {
+    padding-top: 35px;
+  }
+  .orders-title h1 {
+    font-size: 39px;
+  }
+}

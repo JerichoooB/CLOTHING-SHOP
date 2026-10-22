@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: clover
+      POSTGRES_USER: clover
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run npm run db:up to create local settings}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - clover_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U clover -d clover"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+volumes:
+  clover_postgres:

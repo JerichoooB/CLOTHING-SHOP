@@ -1,0 +1,228 @@
+.hero {
+  position: relative;
+  isolation: isolate;
+  background: #d1cbbd;
+}
+.hero-photo {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background-size: 200% 300% !important;
+}
+.hero:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    90deg,
+    #e1dbcf55 0%,
+    #e1dbcf25 32%,
+    transparent 55%
+  );
+}
+.hero-content {
+  position: relative;
+  padding: 4.2vw 7.5%;
+  height: 100%;
+  width: 100%;
+}
+.home-hero .hero-content {
+  padding-top: 5.8vw;
+}
+.hero-content h1 {
+  font-size: clamp(55px, 5.35vw, 92px);
+  line-height: 1.03;
+  letter-spacing: -1px;
+  margin: 0 0 8px;
+}
+.hero-content .eyebrow {
+  font-size: clamp(9px, 0.9vw, 14px);
+  letter-spacing: 2.1px;
+  margin-bottom: 13px;
+}
+.hero-tagline {
+  font-size: clamp(15px, 1.5vw, 24px);
+  line-height: 1.4;
+  margin-bottom: 15px;
+  letter-spacing: 0.3px;
+}
+.home-hero .hero-tagline {
+  font-size: clamp(11px, 1.12vw, 18px);
+  line-height: 1.8;
+  max-width: 35%;
+  margin-bottom: 18px;
+  color: #4c4b42;
+}
+.hero-description {
+  font-size: clamp(12px, 1.18vw, 19px);
+  line-height: 1.5;
+  letter-spacing: 0.25px;
+  color: #494a42;
+  margin-bottom: 20px;
+}
+.breadcrumb {
+  font-size: clamp(10px, 0.85vw, 14px);
+  color: #76776c;
+  margin-bottom: 13px;
+}
+.slide-dots {
+  position: absolute;
+  right: 7%;
+  bottom: 20px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.slide-dots i {
+  width: 4px;
+  height: 4px;
+  background: white;
+  border-radius: 50%;
+}
+.slide-dots i:first-child {
+  width: 20px;
+  height: 1px;
+  border-radius: 0;
+}
+@media (max-width: 900px) {
+  .hero-content {
+    padding-left: 7%;
+    padding-top: 35px;
+  }
+  .home-hero .hero-content {
+    padding-top: 45px;
+  }
+  .hero-content h1 {
+    font-size: 50px;
+  }
+  .hero-tagline {
+    font-size: 14px;
+  }
+  .hero-description {
+    font-size: 11px;
+  }
+}
+@media (max-width: 600px) {
+  .hero-photo {
+    background-size: 300% 300% !important;
+    background-position-x: 100% !important;
+  }
+  .hero:after {
+    background: linear-gradient(90deg, #ded9cbe8, #ded9cb99 45%, transparent);
+  }
+  .hero-content {
+    padding: 45px 7%;
+  }
+  .home-hero .hero-content {
+    padding: 45px 7%;
+  }
+  .hero-content h1 {
+    font-size: 50px;
+  }
+  .hero-content .eyebrow {
+    font-size: 9px;
+  }
+  .hero-tagline {
+    font-size: 13px;
+    max-width: 85%;
+  }
+  .home-hero .hero-tagline {
+    font-size: 11px;
+    max-width: 75%;
+  }
+  .hero-description {
+    font-size: 11px;
+    line-height: 1.6;
+    max-width: 90%;
+  }
+  .breadcrumb {
+    font-size: 9px;
+  }
+}
+@media (min-width: 601px) {
+  .page-accessories .hero-content {
+    padding-top: 2.7vw;
+    padding-left: 7%;
+  }
+  .page-unisex .hero-content {
+    padding-top: 2.7vw;
+    padding-left: 7%;
+  }
+  .page-accessories .hero-content h1 {
+    font-size: clamp(48px, 4.4vw, 80px);
+  }
+  .page-unisex .hero-content h1 {
+    font-size: clamp(48px, 4.4vw, 80px);
+  }
+  .page-accessories .hero-description {
+    font-size: clamp(12px, 1.12vw, 19px);
+    line-height: 1.35;
+  }
+  .page-unisex .hero-description {
+    font-size: clamp(12px, 1.12vw, 19px);
+    line-height: 1.35;
+  }
+  .page-women .hero-content {
+    padding-top: 3.2vw;
+  }
+}
+@media (min-width: 601px) {
+  .page-women .hero-content {
+    padding-top: 2.7vw;
+  }
+  .page-women .hero-content h1 {
+    font-size: clamp(48px, 4.6vw, 80px);
+    margin-bottom: 5px;
+  }
+  .page-women .hero-tagline {
+    font-size: clamp(14px, 1.2vw, 22px);
+    margin-bottom: 12px;
+  }
+  .page-women .hero-description {
+    font-size: clamp(12px, 1.08vw, 17px);
+    line-height: 1.4;
+    margin-bottom: 15px;
+  }
+}
+@media (max-width: 600px) {
+  .collection-hero .hero-content {
+    padding-top: 30px;
+  }
+  .collection-hero .hero-content h1 {
+    font-size: 46px;
+  }
+  .collection-hero .hero-tagline {
+    margin-bottom: 12px;
+  }
+  .collection-hero .hero-description {
+    margin-bottom: 14px;
+  }
+}
+
+.home-hero {
+  height: 31.64vw;
+  max-height: 650px;
+  min-height: 300px;
+}
+.home-hero h1 {
+  font-size: clamp(40px, 4vw, 72px);
+  line-height: 1.08;
+  margin-bottom: 12px;
+}
+@media (max-width: 900px) {
+  .home-hero h1 {
+    font-size: 40px;
+  }
+}
+@media (max-width: 600px) {
+  .home-hero {
+    height: 400px;
+    min-height: 0;
+  }
+}
+@media (max-width: 600px) {
+  .home-hero h1 {
+    font-size: 41px;
+  }
+}

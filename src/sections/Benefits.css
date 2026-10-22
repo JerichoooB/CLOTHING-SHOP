@@ -1,0 +1,70 @@
+.benefits {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 2.4vw 7%;
+  background: #f4f2e9;
+}
+.benefits > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  border-right: 1px solid #e8e5dc;
+}
+.benefits > div:last-child {
+  border: 0;
+}
+.benefits svg {
+  width: 24px;
+  height: 24px;
+}
+.benefits strong {
+  display: block;
+  font-size: clamp(7px, 0.75vw, 12px);
+  font-weight: 400;
+  letter-spacing: 0.8px;
+}
+.benefits small {
+  display: block;
+  font-size: clamp(7px, 0.72vw, 11px);
+  color: #74756c;
+  margin-top: 4px;
+}
+@media (max-width: 900px) {
+  .benefits {
+    padding: 20px 5%;
+  }
+  .benefits > div {
+    gap: 12px;
+  }
+  .benefits strong {
+    font-size: 7px;
+  }
+  .benefits small {
+    font-size: 7px;
+  }
+}
+@media (max-width: 600px) {
+  .benefits {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 0;
+    padding: 22px 6%;
+  }
+  .benefits > div {
+    justify-content: flex-start;
+    padding-left: 12px;
+  }
+  .benefits > div:nth-child(2) {
+    border: 0;
+  }
+  .benefits strong {
+    font-size: 7px;
+  }
+  .benefits small {
+    font-size: 8px;
+  }
+  .benefits svg {
+    width: 22px;
+    height: 22px;
+  }
+}

@@ -1,0 +1,134 @@
+import { useState } from "react";
+import { useStore } from "../context/StoreContext";
+import Hero from "./Hero";
+import CategoryNavigation from "./CategoryNavigation";
+import WomenFilters from "./WomenFilters";
+import ProductGrid from "./ProductGrid";
+import CatalogState from "./CatalogState";
+import "./CollectionView.css";
+export default function CollectionView({
+  page,
+  query,
+  onClearSearch,
+  onNavigate,
+}) {
+  const { products, status } = useStore();
+  const [filter, setFilter] = useState("All"),
+    [sort, setSort] = useState("featured"),
+    [sizeFilter, setSizeFilter] = useState(""),
+    [colorFilter, setColorFilter] = useState(""),
+    [priceFilter, setPriceFilter] = useState("");
+  const list = products
+    .filter(
+      (p) =>
+        (page === "Shop" || p.collections.includes(page)) &&
+        (filter === "All" || p.type === filter) &&
+        (!sizeFilter || p.sizes.includes(sizeFilter)) &&
+        (!colorFilter || p.colors.includes(colorFilter)) &&
+        (!priceFilter ||
+          (priceFilter === "under"
+            ? p.price < 1000
+            : priceFilter === "mid"
+              ? p.price >= 1000 && p.price <= 1500
+              : priceFilter === "upper"
+                ? p.price > 1500 && p.price <= 2500
+                : priceFilter === "premium"
+                  ? p.price > 2500 && p.price <= 4000
+                  : p.price > 4000)) &&
+        p.name.toLowerCase().includes(query.toLowerCase()),
+    )
+    .sort((a, b) =>
+      sort === "low"
+        ? a.price - b.price
+        : sort === "high"
+          ? b.price - a.price
+          : page === "Accessories"
+            ? (a.accessoryOrder ?? a.order) - (b.accessoryOrder ?? b.order)
+            : a.order - b.order,
+    );
+  return (
+    <>
+      <Hero page={page} go={onNavigate} />
+      <div className="section collection-navigation">
+        <CategoryNavigation page={page} onNavigate={onNavigate} />
+      </div>
+      <section
+        className={`section collection ${page === "Women" ? "women-collection" : ""}`}
+        id="products"
+      >
+        {page === "Women" && (
+          <WomenFilters
+            {...{
+              filter,
+              setFilter,
+              sizeFilter,
+              setSizeFilter,
+              colorFilter,
+              setColorFilter,
+              priceFilter,
+              setPriceFilter,
+            }}
+          />
+        )}
+        <div className="catalog-content">
+          <div className="filters">
+            {page === "Women" ? (
+              <span className="results">{list.length} products</span>
+            ) : (
+              <div>
+                {[
+                  "All",
+                  ...(page === "Accessories"
+                    ? ["Bags", "Headwear", "Socks & Small Goods"]
+                    : ["Tops", "Bottoms", "Outerwear", "Accessories"]),
+                ].map((name) => (
+                  <button
+                    className={filter === name ? "active" : ""}
+                    key={name}
+                    onClick={() => setFilter(name)}
+                  >
+                    {name}
+                  </button>
+                ))}
+              </div>
+            )}
+            <label>
+              Sort by:{" "}
+              <select value={sort} onChange={(e) => setSort(e.target.value)}>
+                <option value="featured">Featured</option>
+                <option value="low">Price: low to high</option>
+                <option value="high">Price: high to low</option>
+              </select>
+            </label>
+          </div>
+          {query && (
+            <div className="search-summary">
+              <p>Search results for “{query}”</p>
+              <button onClick={onClearSearch}>Clear search</button>
+            </div>
+          )}
+          {status === "ready" ? (
+            <>
+              <ProductGrid products={list} />
+              {!list.length ? (
+                <p className="empty">No pieces found. Try another filter.</p>
+              ) : (
+                <div className="pagination" aria-label="Catalog page">
+                  <button disabled aria-label="Previous page">
+                    ←
+                  </button>
+                  <span aria-current="page">1</span>
+                  <button disabled aria-label="Next page">
+                    →
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+            <CatalogState />
+          )}
+        </div>
+      </section>
+    </>
+  );
+}

@@ -1,0 +1,16 @@
+.search-form {
+  display: flex;
+  gap: 12px;
+}
+.search-form input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: 1px solid #d3d2c7;
+  padding: 13px;
+}
+@media (max-width: 600px) {
+  .search-form {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,20 @@
+.data-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 22px 0;
+  font-size: 11px;
+  color: #6f7962;
+}
+.data-pagination button {
+  padding: 7px 0;
+}
+.data-pagination span {
+  text-align: center;
+}
+@media (max-width: 600px) {
+  .data-pagination {
+    font-size: 10px;
+  }
+}

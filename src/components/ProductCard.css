@@ -1,0 +1,198 @@
+.product-image {
+  position: relative;
+  overflow: hidden;
+  background: #e5e2d9;
+  aspect-ratio: 1.15;
+}
+.home-grid .product-image {
+  aspect-ratio: 1.04;
+}
+.product-image > button:first-child {
+  height: 100%;
+  width: 100%;
+}
+.product-image .asset {
+  transition: filter 0.3s;
+}
+.product-image:hover .asset {
+  filter: brightness(0.97);
+}
+.quick {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 12px;
+  text-align: center;
+  background: #faf9f0ec;
+  font-size: 8px;
+  letter-spacing: 1px;
+  transform: translateY(100%);
+  transition: transform 0.2s;
+}
+.product-image:hover .quick {
+  transform: translateY(0);
+}
+.product-image:focus-within .quick {
+  transform: translateY(0);
+}
+.favorite {
+  position: absolute;
+  right: 10px;
+  top: 9px;
+}
+.favorite svg {
+  width: 18px;
+  height: 18px;
+}
+.favorite.liked svg {
+  fill: #363d2c;
+  stroke: #363d2c;
+}
+.badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  border-radius: 15px;
+  background: #22241f;
+  color: white;
+  font-size: 7px;
+  letter-spacing: 0.6px;
+  padding: 4px 7px;
+}
+.product-meta {
+  padding-top: 8px;
+}
+.product-name {
+  display: block;
+  font-size: clamp(10px, 0.91vw, 15px);
+  line-height: 1.45;
+  text-align: left;
+  margin-bottom: 3px;
+}
+.product-meta > span {
+  font-size: clamp(10px, 0.91vw, 15px);
+}
+.product-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  min-height: 17px;
+}
+.swatches {
+  display: flex;
+  gap: 8px;
+}
+.swatches i {
+  width: clamp(12px, 1.28vw, 20px);
+  height: clamp(12px, 1.28vw, 20px);
+  border: 1px solid #d5d3ca;
+  background: var(--swatch);
+  border-radius: 50%;
+}
+.home-grid .swatches i {
+  width: 11px;
+  height: 11px;
+}
+.add-small {
+  display: none;
+  border: 1px solid #d9d6ce;
+  border-radius: 50%;
+  width: 27px;
+  height: 27px;
+  place-items: center;
+}
+.home-grid .add-small {
+  display: grid;
+}
+.add-small svg {
+  width: 13px;
+  height: 13px;
+}
+.home-grid .favorite {
+  display: none;
+}
+.home-grid .badge {
+  display: none;
+}
+.page-accessories .product-image {
+  aspect-ratio: 1.09;
+}
+.page-unisex .product-image {
+  aspect-ratio: 1.15;
+}
+.women-collection .product-image {
+  aspect-ratio: 1.02;
+}
+.women-collection .product-name {
+  font-size: 10px;
+}
+.women-collection .product-meta > span {
+  font-size: 10px;
+}
+.women-collection .swatches i {
+  width: 14px;
+  height: 14px;
+}
+.women-collection .swatches {
+  gap: 8px;
+}
+.women-collection .favorite svg {
+  width: 15px;
+  height: 15px;
+}
+@media (min-width: 1500px) {
+  .women-collection .product-name {
+    font-size: 12px;
+  }
+  .women-collection .product-meta > span {
+    font-size: 12px;
+  }
+}
+@media (max-width: 600px) {
+  .product-name {
+    font-size: 11px;
+  }
+  .product-meta > span {
+    font-size: 11px;
+  }
+  .product-image {
+    aspect-ratio: 1 !important;
+  }
+  .product-image .favorite svg {
+    width: 17px;
+    height: 17px;
+  }
+  .swatches i {
+    width: 13px;
+    height: 13px;
+  }
+  .home-grid .swatches i {
+    width: 11px;
+    height: 11px;
+  }
+  .product-meta {
+    padding-top: 8px;
+  }
+  .quick {
+    display: none;
+  }
+  .women-collection .product-name {
+    font-size: 10px;
+  }
+  .women-collection .product-meta > span {
+    font-size: 10px;
+  }
+  .women-collection .swatches i {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+.product-stock {
+  display: block;
+  font-size: 10px;
+  color: #9a5d44;
+  margin-top: 5px;
+}

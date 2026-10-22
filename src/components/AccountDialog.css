@@ -1,0 +1,83 @@
+.account-panel {
+  max-width: 440px;
+  margin: auto;
+  padding: 10px 0;
+}
+.account-panel > p:not(.eyebrow) {
+  font-size: 13px;
+  color: #74796b;
+  line-height: 1.7;
+}
+.account-panel h2 {
+  font-size: 36px;
+}
+.auth-tabs {
+  display: flex;
+  gap: 25px;
+  border-bottom: 1px solid #dcddd2;
+  margin: 25px 0;
+}
+.auth-tabs button {
+  font-size: 12px;
+  padding: 0 0 12px;
+  color: #7e8375;
+}
+.auth-tabs .selected {
+  border-bottom: 1px solid #333a29;
+  color: #252b20;
+}
+.auth-form {
+  display: grid;
+  gap: 18px;
+}
+.auth-form label {
+  display: grid;
+  gap: 7px;
+  font-size: 12px;
+}
+.auth-form input {
+  background: transparent;
+  border: 1px solid #ced2c3;
+  padding: 12px;
+  width: 100%;
+  border-radius: 0;
+}
+.auth-form .primary {
+  margin-top: 6px;
+}
+.auth-error {
+  color: #a43a2b !important;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.password-hint {
+  font-size: 10px;
+  color: #7e8375;
+  margin-top: -12px;
+}
+.account-note {
+  margin: 18px 0 24px;
+}
+.account-avatar {
+  width: 36px;
+  height: 36px;
+  margin-bottom: 18px;
+}
+.account-loading {
+  padding: 30px 0;
+  text-align: center;
+}
+
+.account-links {
+  display: grid;
+  gap: 12px;
+  margin: 20px 0 25px;
+}
+.account-links button {
+  text-align: left;
+  text-decoration: underline;
+  font-size: 12px;
+}
+.account-panel h2 {
+  overflow-wrap: anywhere;
+}

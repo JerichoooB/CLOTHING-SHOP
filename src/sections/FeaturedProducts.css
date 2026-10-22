@@ -1,0 +1,14 @@
+.featured {
+  padding-top: 12px;
+  padding-bottom: 26px;
+}
+@media (min-width: 1500px) {
+  .featured {
+    padding-top: 8px;
+  }
+}
+@media (max-width: 600px) {
+  .featured {
+    padding-top: 6px;
+  }
+}

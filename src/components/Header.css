@@ -1,0 +1,134 @@
+header {
+  height: clamp(58px, 5.25vw, 90px);
+  padding: 0 7%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8f6f0;
+  gap: 30px;
+}
+nav {
+  display: flex;
+  gap: clamp(30px, 3vw, 55px);
+  align-items: center;
+  height: 100%;
+}
+nav a {
+  position: relative;
+  font-size: clamp(10px, 0.9vw, 15px);
+  padding: 11px 0;
+}
+nav .active:after {
+  content: "";
+  height: 1px;
+  background: #666b5f;
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  right: 0;
+}
+.header-actions {
+  display: flex;
+  gap: clamp(20px, 2vw, 35px);
+  align-items: center;
+}
+.header-actions button {
+  position: relative;
+}
+.header-actions svg {
+  width: clamp(19px, 1.7vw, 27px);
+  height: clamp(19px, 1.7vw, 27px);
+}
+.count {
+  position: absolute;
+  right: -7px;
+  top: -4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #20211e;
+  color: white;
+  font-size: 8px;
+  display: grid;
+  place-items: center;
+}
+.collection-nav {
+  display: none;
+}
+@media (max-width: 900px) {
+  header {
+    padding: 0 5%;
+    gap: 20px;
+  }
+  nav {
+    gap: 25px;
+  }
+  .header-actions {
+    gap: 20px;
+  }
+}
+@media (max-width: 600px) {
+  header {
+    height: 100px;
+    flex-wrap: wrap;
+    gap: 0;
+    padding: 10px 5%;
+  }
+  nav {
+    order: 3;
+    width: 100%;
+    height: auto;
+    justify-content: center;
+    gap: 35px;
+  }
+  nav a {
+    font-size: 11px;
+    padding: 8px 0;
+  }
+  .header-actions {
+    gap: 19px;
+  }
+  .header-actions svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+@media (min-width: 601px) {
+  .page-home header {
+    padding-left: 6.2%;
+  }
+  .page-accessories header {
+    padding-left: 6.2%;
+  }
+  .page-unisex header {
+    padding-left: 6.2%;
+  }
+}
+.account-indicator {
+  position: absolute;
+  right: -3px;
+  bottom: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #6c7c58;
+  border: 1px solid #f8f6f0;
+}
+
+@media (max-width: 600px) {
+  header nav {
+    gap: 20px;
+    justify-content: flex-start;
+    overflow-x: auto;
+  }
+  header nav a {
+    font-size: 10px;
+    white-space: nowrap;
+  }
+  header nav {
+    scrollbar-width: none;
+  }
+  header nav::-webkit-scrollbar {
+    display: none;
+  }
+}

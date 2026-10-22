@@ -1,0 +1,133 @@
+footer {
+  background: #1b1d19;
+  color: #efeee8;
+  padding: 22px 7% 18px;
+}
+.footer-main {
+  display: grid;
+  grid-template-columns: 2fr 1.35fr 1.35fr 0.85fr;
+  gap: 30px;
+  padding-bottom: 15px;
+}
+.footer-main .brand {
+  font-size: clamp(20px, 1.7vw, 29px);
+  letter-spacing: 5px;
+  gap: 10px;
+}
+.footer-main .clover {
+  width: 35px;
+  height: 43px;
+}
+.tagline {
+  font-size: clamp(8px, 0.7vw, 11px);
+  color: #c5c6ba;
+  margin-left: 45px;
+  white-space: nowrap;
+}
+.footer-main h4 {
+  font-size: clamp(9px, 0.8vw, 13px);
+  font-weight: 400;
+  margin: 0 0 5px;
+}
+.footer-main > div > a:not(.brand) {
+  display: block;
+  font-size: clamp(8px, 0.75vw, 12px);
+  color: #c2c4b7;
+  line-height: 1.35;
+}
+.footer-main > div > button {
+  display: block;
+  font-size: clamp(8px, 0.75vw, 12px);
+  color: #c2c4b7;
+  line-height: 1.35;
+}
+.social-links {
+  display: flex;
+  gap: 17px;
+  font-size: 20px;
+}
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid #ffffff30;
+  padding-top: 15px;
+  font-size: clamp(7px, 0.62vw, 10px);
+  color: #c2c4b7;
+}
+.footer-bottom > span:first-child {
+  margin-right: auto;
+}
+.footer-bottom > button:last-child {
+  border-left: 1px solid #7d8074;
+  padding-left: 10px;
+}
+@media (min-width: 1500px) {
+  footer {
+    padding-top: 25px;
+  }
+  .footer-main {
+    padding-bottom: 20px;
+  }
+}
+@media (max-width: 900px) {
+  .footer-main {
+    gap: 20px;
+  }
+  .social-links {
+    gap: 10px;
+  }
+}
+@media (max-width: 600px) {
+  footer {
+    padding: 25px 6% 20px;
+  }
+  .footer-main {
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+  }
+  .footer-main > div:first-child {
+    grid-column: 1/-1;
+  }
+  .footer-main > div:last-child {
+    grid-column: 1/-1;
+  }
+  .footer-main .brand {
+    font-size: 23px;
+  }
+  .footer-main h4 {
+    font-size: 10px;
+    margin-bottom: 8px;
+  }
+  .footer-main > div > a:not(.brand) {
+    font-size: 10px;
+    line-height: 1.65;
+  }
+  .footer-main > div > button {
+    font-size: 10px;
+    line-height: 1.65;
+  }
+  .social-links {
+    font-size: 19px;
+  }
+  .footer-bottom {
+    font-size: 7px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .footer-bottom > span:first-child {
+    width: 100%;
+    margin-bottom: 4px;
+  }
+}
+
+footer .brand .clover {
+  filter: brightness(0) invert(1);
+}
+.social-links .youtube svg {
+  width: 18px;
+  height: 18px;
+}
+.social-links {
+  align-items: center;
+}

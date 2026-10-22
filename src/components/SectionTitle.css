@@ -1,0 +1,36 @@
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 17px;
+}
+.section-title h2 {
+  font-size: clamp(26px, 2.6vw, 42px);
+  line-height: 1.1;
+}
+.section-subtitle {
+  font-size: clamp(9px, 0.83vw, 13px);
+  letter-spacing: 0.3px;
+  margin-top: 11px;
+  color: #77786e;
+}
+.text-link {
+  font-size: clamp(7px, 0.7vw, 11px);
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  padding-bottom: 1px;
+}
+@media (min-width: 1500px) {
+  .section-title {
+    margin-bottom: 24px;
+  }
+}
+@media (max-width: 600px) {
+  .section-title h2 {
+    font-size: 27px;
+  }
+  .section-subtitle {
+    font-size: 9px;
+    margin-top: 8px;
+  }
+}

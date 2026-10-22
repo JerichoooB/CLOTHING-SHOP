@@ -1,0 +1,53 @@
+.info {
+  max-width: 850px;
+  padding: 70px 0 90px;
+  min-height: 65vh;
+}
+.info h1 {
+  font-size: 62px;
+  margin-bottom: 25px;
+}
+.info p {
+  color: #6e7163;
+  max-width: 650px;
+  margin-bottom: 20px;
+}
+.info > .asset {
+  height: 350px;
+  margin: 25px 0;
+}
+.info h2 {
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+.info form {
+  display: grid;
+  gap: 20px;
+  max-width: 600px;
+}
+.info label {
+  font-size: 12px;
+  display: grid;
+  gap: 8px;
+}
+.info input {
+  padding: 13px;
+  background: transparent;
+  border: 1px solid #d1d3c6;
+}
+.info textarea {
+  padding: 13px;
+  background: transparent;
+  border: 1px solid #d1d3c6;
+}
+@media (max-width: 600px) {
+  .info {
+    padding-top: 45px;
+  }
+  .info h1 {
+    font-size: 44px;
+  }
+  .info > .asset {
+    height: 230px;
+  }
+}

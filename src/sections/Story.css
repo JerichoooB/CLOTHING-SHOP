@@ -1,0 +1,96 @@
+.story {
+  padding-top: 8px;
+  padding-bottom: 18px;
+  display: grid;
+  grid-template-columns: 1fr 1.12fr;
+}
+.story > .asset {
+  min-height: 190px;
+}
+.story > div {
+  background: #f0ede4;
+  padding: 30px 17%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+.story h2 {
+  font-size: clamp(22px, 2vw, 34px);
+  white-space: nowrap;
+  margin-bottom: 10px;
+}
+.story p:not(.eyebrow) {
+  font-size: clamp(10px, 0.9vw, 14px);
+  line-height: 1.7;
+  color: #67685e;
+  margin-bottom: 13px;
+}
+.story .primary {
+  padding: 9px 17px;
+  font-size: 8px;
+}
+@media (min-width: 1500px) {
+  .story {
+    padding-top: 8px;
+    padding-bottom: 25px;
+  }
+  .story > div {
+    padding-top: 45px;
+    padding-bottom: 45px;
+  }
+  .story > .asset {
+    min-height: 290px;
+  }
+}
+@media (max-width: 900px) {
+  .story > div {
+    padding: 25px 10%;
+  }
+}
+@media (max-width: 600px) {
+  .story {
+    grid-template-columns: 1fr;
+    padding-top: 5px;
+    padding-bottom: 26px;
+  }
+  .story > .asset {
+    height: 200px;
+  }
+  .story > div {
+    padding: 28px;
+  }
+  .story h2 {
+    font-size: 29px;
+    white-space: normal;
+  }
+  .story .eyebrow {
+    font-size: 8px;
+  }
+  .story p:not(.eyebrow) {
+    font-size: 11px;
+  }
+}
+
+@media (min-width: 601px) {
+  .story > div {
+    padding-top: 22px;
+    padding-bottom: 22px;
+  }
+  .story > .asset {
+    min-height: 0;
+  }
+  .story {
+    height: calc(18.55vw + 26px);
+  }
+}
+@media (min-width: 601px) {
+  .story {
+    height: calc(18.55vw + 26px);
+  }
+  .story > div {
+    min-height: 0;
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+}

@@ -1,0 +1,28 @@
+.contact-page textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+.contact-email {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  overflow-wrap: anywhere;
+}
+.contact-honeypot {
+  display: none;
+}
+.contact-page .contact-status {
+  margin: 0;
+  padding: 14px 16px;
+  border: 1px solid #d1d3c6;
+}
+.contact-page .contact-status-error {
+  color: #92382d;
+  border-color: #caa89e;
+}
+.contact-page .contact-status-success {
+  color: #38513b;
+}
+.contact-page button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}

@@ -1,0 +1,30 @@
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-family: Georgia, serif;
+  font-size: clamp(23px, 2.18vw, 36px);
+  letter-spacing: 6px;
+  white-space: nowrap;
+}
+.brand .clover {
+  width: clamp(34px, 3.4vw, 54px);
+  height: clamp(38px, 3.9vw, 62px);
+  flex-shrink: 0;
+}
+@media (max-width: 900px) {
+  .brand {
+    font-size: 22px;
+    letter-spacing: 4px;
+    gap: 10px;
+  }
+}
+@media (max-width: 600px) {
+  .brand {
+    font-size: 22px;
+  }
+  .brand .clover {
+    width: 34px;
+    height: 40px;
+  }
+}
