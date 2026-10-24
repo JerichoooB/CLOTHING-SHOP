@@ -2,6 +2,7 @@ import { Router } from "express";
 import { randomUUID, createHash } from "node:crypto";
 import { transaction } from "./db.js";
 import { requireUser, requireAdmin, fail } from "./security.js";
+import { salesAnalytics } from "./analytics.js";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 export const transitions = {
   pending: ["processing", "cancelled"],
@@ -230,12 +231,10 @@ export function commerceRouter(database) {
       );
       return { id, replayed: false };
     });
-    return res
-      .status(result.replayed ? 200 : 201)
-      .json({
-        order: await getOrder(database, result.id),
-        replayed: result.replayed,
-      });
+    return res.status(result.replayed ? 200 : 201).json({
+      order: await getOrder(database, result.id),
+      replayed: result.replayed,
+    });
   });
   router.get("/orders/attempt/:key", async (req, res) => {
     if (!UUID.test(req.params.key)) fail(400, "Invalid checkout request ID.");
@@ -302,6 +301,9 @@ async function listOrders(database, query, userId) {
 export function adminRouter(database) {
   const router = Router();
   router.use(requireUser, requireAdmin);
+  router.get("/analytics", async (req, res) =>
+    res.json(await salesAnalytics(database, req.query.days)),
+  );
   router.get("/summary", async (req, res) => {
     const [stock, orders] = await Promise.all([
       database.query(
@@ -385,6 +387,31 @@ export function adminRouter(database) {
           ? req.query.search.slice(0, 80)
           : "",
       low = req.query.lowStock === "1";
+    if (req.query.grouped === "1") {
+      const values = [`%${search}%`];
+      const where = `WHERE p.active AND EXISTS (
+        SELECT 1 FROM product_variants v WHERE v.product_id=p.id AND v.active
+        AND (p.name ILIKE $1 OR p.sku ILIKE $1 OR v.sku ILIKE $1)
+        ${low ? "AND v.stock<=v.low_stock_threshold" : ""})`;
+      const count = await database.query(
+        "SELECT count(*)::int AS total FROM products p " + where,
+        values,
+      );
+      const result = await database.query(
+        `SELECT p.id::text,p.id AS "productId",p.sku,p.name,
+        (SELECT json_agg(json_build_object('id',v.id::text,'sku',v.sku,'size',v.size,
+          'stock',v.stock,'lowStockThreshold',v.low_stock_threshold) ORDER BY v.id)
+          FROM product_variants v WHERE v.product_id=p.id AND v.active) AS variants
+        FROM products p ${where} ORDER BY p.id LIMIT 20 OFFSET $2`,
+        [...values, offset],
+      );
+      return res.json({
+        items: result.rows,
+        total: count.rows[0].total,
+        page,
+        pageSize,
+      });
+    }
     const params = [`%${search}%`],
       where = ` WHERE v.active AND p.active AND (p.name ILIKE $1 OR v.sku ILIKE $1) ${low ? "AND v.stock<=v.low_stock_threshold" : ""}`;
     const count = await database.query(

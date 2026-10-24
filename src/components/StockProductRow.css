@@ -1,0 +1,14 @@
+.stock-size-select {
+  min-width: 115px;
+  max-width: 180px;
+  padding: 8px;
+  background: transparent;
+  border: 1px solid #d4dbc7;
+  font-size: 12px;
+}
+.stock-size-select:disabled {
+  opacity: 0.65;
+}
+.stock-product-row .inventory-adjust input:disabled {
+  opacity: 0.65;
+}

@@ -3,10 +3,13 @@ import { api } from "../lib/api";
 import { useStore } from "../context/StoreContext";
 import OrderCard, { statusLabels } from "../components/OrderCard";
 import Pagination from "../components/Pagination";
+import AdminAnalytics from "../components/AdminAnalytics";
+import StockProductRow from "../components/StockProductRow";
 import "./Admin.css";
 export default function Admin() {
   const { user, authLoading, setModal, load, notify } = useStore();
   const [tab, setTab] = useState("inventory"),
+    [selectedSizes, setSelectedSizes] = useState({}),
     [summary, setSummary] = useState(null),
     [data, setData] = useState(null),
     [page, setPage] = useState(1),
@@ -23,7 +26,7 @@ export default function Admin() {
       .catch((err) => setError(err.message));
   }, [user?.id, user?.role, refresh]);
   useEffect(() => {
-    if (user?.role !== "admin") return;
+    if (user?.role !== "admin" || tab === "analytics") return;
     let active = true;
     setData(null);
     setError("");
@@ -32,6 +35,7 @@ export default function Admin() {
       search,
       lowStock: low ? "1" : "0",
       status,
+      grouped: "1",
     });
     api(`/api/admin/${tab === "inventory" ? "inventory" : "orders"}?${query}`)
       .then((result) => {
@@ -99,7 +103,7 @@ export default function Admin() {
     <section className="admin-page section">
       <p className="eyebrow">CLOVER STORE MANAGEMENT</p>
       <div className="admin-title">
-        <h1>Inventory & Orders</h1>
+        <h1>Store overview</h1>
         <button onClick={reload}>Refresh ↻</button>
       </div>
       <div className="admin-stats">
@@ -116,6 +120,15 @@ export default function Admin() {
         ))}
       </div>
       <div className="admin-tabs">
+        <button
+          className={tab === "analytics" ? "selected" : ""}
+          onClick={() => {
+            setTab("analytics");
+            setError("");
+          }}
+        >
+          Sales analytics
+        </button>
         <button
           className={tab === "inventory" ? "selected" : ""}
           onClick={() => {
@@ -140,7 +153,9 @@ export default function Admin() {
           {error}
         </p>
       )}
-      {tab === "inventory" ? (
+      {tab === "analytics" ? (
+        <AdminAnalytics refresh={refresh} />
+      ) : tab === "inventory" ? (
         <>
           <div className="admin-filters">
             <label>
@@ -161,6 +176,7 @@ export default function Admin() {
                 checked={low}
                 onChange={(e) => {
                   setLow(e.target.checked);
+                  setSelectedSizes({});
                   setPage(1);
                 }}
               />{" "}
@@ -184,11 +200,21 @@ export default function Admin() {
                   </thead>
                   <tbody>
                     {data.items.map((item) => (
-                      <InventoryRow
-                        key={item.id + refresh}
+                      <StockProductRow
+                        key={item.id}
                         item={item}
+                        selectedId={selectedSizes[item.id]}
+                        onSelect={(id) =>
+                          setSelectedSizes((current) => ({
+                            ...current,
+                            [item.id]: id,
+                          }))
+                        }
                         onSaved={reload}
-                        onHistory={() => history(item)}
+                        lowOnly={low}
+                        onHistory={(variant) =>
+                          history({ ...variant, name: item.name })
+                        }
                       />
                     ))}
                   </tbody>
@@ -276,83 +302,5 @@ export default function Admin() {
         </>
       )}
     </section>
-  );
-}
-function InventoryRow({ item, onSaved, onHistory }) {
-  const [pending, setPending] = useState(false),
-    [error, setError] = useState("");
-  async function adjust(event) {
-    event.preventDefault();
-    setPending(true);
-    setError("");
-    const form = Object.fromEntries(new FormData(event.currentTarget));
-    try {
-      await api(`/api/admin/inventory/${item.id}/adjust`, {
-        method: "POST",
-        body: JSON.stringify({
-          delta: Number(form.delta),
-          reason: form.reason,
-        }),
-      });
-      onSaved();
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setPending(false);
-    }
-  }
-  return (
-    <tr>
-      <td>
-        <strong>{item.name}</strong>
-        <small>
-          Product ID {item.productId} · {item.sku}
-        </small>
-      </td>
-      <td>{item.size}</td>
-      <td>
-        <span
-          className={
-            item.stock <= item.lowStockThreshold ? "stock-low" : "stock-good"
-          }
-        >
-          {item.stock}
-        </span>
-        <small>Low at {item.lowStockThreshold}</small>
-      </td>
-      <td>
-        <form className="inventory-adjust" onSubmit={adjust}>
-          <input
-            type="number"
-            name="delta"
-            aria-label={`Stock adjustment for ${item.sku}`}
-            required
-            min={-100000}
-            max={100000}
-            step="1"
-            placeholder="+ / − qty"
-          />
-          <input
-            name="reason"
-            aria-label={`Adjustment reason for ${item.sku}`}
-            required
-            minLength={3}
-            maxLength={300}
-            placeholder="Reason"
-          />
-          <button disabled={pending}>{pending ? "Saving…" : "Apply"}</button>
-          {error && (
-            <p className="auth-error" role="alert">
-              {error}
-            </p>
-          )}
-        </form>
-      </td>
-      <td>
-        <button className="inventory-history" onClick={onHistory}>
-          View log
-        </button>
-      </td>
-    </tr>
   );
 }

@@ -105,3 +105,9 @@ The form shows success only after Formspree accepts the submission, keeps entere
 ## Deploy to Vercel with Neon
 
 See [DEPLOYMENT.md](DEPLOYMENT.md) for the Vercel configuration, required environment variables, and the safe local-to-Neon transfer that preserves accounts, admin roles, stock and orders. Docker remains local; Vercel connects to hosted PostgreSQL.
+
+### Management analytics and stock
+
+Manage Store includes a Sales analytics tab with 7-, 30-, and 90-day reports in Philippine time. Revenue includes shipping on approved, non-cancelled demo orders; reversed payments are excluded and shown separately. Reports include units sold, purchasing customers, average order value, daily figures, top products, current order status, and current inventory health. No real payments or profit tracking are implied.
+
+Stock monitoring displays one row per product. Select a size to see and adjust that size's stock or view its movement history; the selection remains after saving. Search supports product names and product/size SKUs. Low-stock filtering selects products with at least one low-stock size. No database migration is required for these management features.
