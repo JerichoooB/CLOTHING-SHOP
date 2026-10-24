@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import {
-  User,
+  Package,
+  Settings2,
+  CheckCircle2,
+  ShoppingBag,
   LogOut,
   Mail,
   ArrowRight,
@@ -17,12 +20,17 @@ export default function AccountDialog({ onNavigate }) {
   const { user, setUser, authLoading, notify } = useStore();
   const [mode, setMode] = useState("login"),
     [error, setError] = useState(""),
-    [pending, setPending] = useState(false);
+    [pending, setPending] = useState(false),
+    [signedOut, setSignedOut] = useState(false);
   const inFlight = useRef(false);
   const errorRef = useRef(null);
+  const headingRef = useRef(null);
   useEffect(() => {
     if (error) errorRef.current?.focus();
   }, [error]);
+  useEffect(() => {
+    headingRef.current?.focus();
+  }, [user?.id, signedOut]);
   function switchMode(next) {
     if (inFlight.current) return;
     setMode(next);
@@ -62,16 +70,20 @@ export default function AccountDialog({ onNavigate }) {
     }
   }
   async function logout() {
+    if (inFlight.current) return;
+    inFlight.current = true;
     setError("");
     setPending(true);
     try {
       await api("/api/auth/logout", { method: "POST" });
       setUser(null);
+      setSignedOut(true);
       setMode("login");
       notify("You’re signed out.");
     } catch (err) {
       setError(err.message);
     } finally {
+      inFlight.current = false;
       setPending(false);
     }
   }
@@ -81,34 +93,133 @@ export default function AccountDialog({ onNavigate }) {
         Checking your account…
       </p>
     );
-  if (user)
+  if (user) {
+    const initials = user.name
+      .trim()
+      .split(/\s+/)
+      .slice(0, 2)
+      .map((part) => part[0])
+      .join("")
+      .toUpperCase();
     return (
-      <div className="account-panel">
-        <User className="account-avatar" />
-        <p className="eyebrow">YOUR CLOVER ACCOUNT</p>
-        <h2>Hello, {user.name}.</h2>
-        <p>{user.email}</p>
-        <p className="account-note">
-          You’re signed in. Your shopping bag is saved on this device.
-        </p>
-        {error && (
-          <p className="auth-error" role="alert">
-            {error}
-          </p>
-        )}
-        <div className="account-links">
-          <button onClick={() => onNavigate("Orders")}>
-            My orders & delivery status ⟶
-          </button>
-          {user.role === "admin" && (
-            <button onClick={() => onNavigate("Admin")}>
-              Inventory & order management ⟶
-            </button>
-          )}
+      <div className="account-dashboard" aria-busy={pending}>
+        <div className="account-cover">
+          <Asset editorial cell={5} label="Clover fabric detail" />
+          <span>
+            <img src="/images/clover-five-leaf.svg" alt="" /> YOUR CLOVER SPACE
+          </span>
         </div>
-        <button className="primary" disabled={pending} onClick={logout}>
-          <LogOut size={16} />
-          {pending ? "SIGNING OUT…" : "SIGN OUT"}
+        <div className="account-dashboard-body">
+          <div className="account-identity">
+            <span className="account-initials" aria-hidden="true">
+              {initials}
+            </span>
+            <span className="account-role">
+              <i />
+              {user.role === "admin" ? "Store administrator" : "Signed in"}
+            </span>
+          </div>
+          <p className="eyebrow">GOOD TO SEE YOU AGAIN</p>
+          <h2 ref={headingRef} tabIndex={-1}>
+            Hello, {user.name}.
+          </h2>
+          <p className="account-email">
+            <Mail aria-hidden="true" />
+            {user.email}
+          </p>
+          <div className="account-action-cards">
+            <button disabled={pending} onClick={() => onNavigate("Orders")}>
+              <span className="account-action-icon">
+                <Package />
+              </span>
+              <span>
+                <strong>My orders</strong>
+                <small>Follow your orders and delivery status</small>
+              </span>
+              <ArrowRight />
+            </button>
+            {user.role === "admin" && (
+              <button disabled={pending} onClick={() => onNavigate("Admin")}>
+                <span className="account-action-icon">
+                  <Settings2 />
+                </span>
+                <span>
+                  <strong>Manage store</strong>
+                  <small>Sales analytics, inventory and orders</small>
+                </span>
+                <ArrowRight />
+              </button>
+            )}
+            <button disabled={pending} onClick={() => onNavigate("Shop")}>
+              <span className="account-action-icon">
+                <ShoppingBag />
+              </span>
+              <span>
+                <strong>Explore the collection</strong>
+                <small>Find your next everyday favourite</small>
+              </span>
+              <ArrowRight />
+            </button>
+          </div>
+          {error && (
+            <div
+              className="auth-form-error"
+              role="alert"
+              ref={errorRef}
+              tabIndex={-1}
+            >
+              <CircleAlert aria-hidden="true" />
+              <p>{error}</p>
+            </div>
+          )}
+          <div className="account-signout-section">
+            <button
+              className="account-signout"
+              disabled={pending}
+              onClick={logout}
+            >
+              {pending ? (
+                <LoaderCircle className="auth-spinner" aria-hidden="true" />
+              ) : (
+                <LogOut aria-hidden="true" />
+              )}
+              {pending ? "SIGNING OUT…" : "SIGN OUT"}
+            </button>
+            <p>Signing out keeps your shopping bag on this device.</p>
+          </div>
+          <button
+            className="account-support-link"
+            disabled={pending}
+            onClick={() => onNavigate("Contact")}
+          >
+            Need help with your account? Contact us
+          </button>
+        </div>
+      </div>
+    );
+  }
+  if (signedOut)
+    return (
+      <div className="account-signedout">
+        <span className="account-success-icon">
+          <CheckCircle2 aria-hidden="true" />
+        </span>
+        <p className="eyebrow">UNTIL NEXT TIME</p>
+        <h2 ref={headingRef} tabIndex={-1}>
+          You’re signed out.
+        </h2>
+        <p>
+          Your session has ended. Your shopping bag is still here whenever
+          you’re ready.
+        </p>
+        <button className="primary" onClick={() => onNavigate("Shop")}>
+          CONTINUE SHOPPING <ArrowRight aria-hidden="true" />
+        </button>
+        <button
+          className="account-login-again"
+          onClick={() => setSignedOut(false)}
+        >
+          Log in again
         </button>
       </div>
     );
@@ -140,7 +251,9 @@ export default function AccountDialog({ onNavigate }) {
           alt="Five-leaf Clover"
         />
         <p className="eyebrow">YOUR CLOVER ACCOUNT</p>
-        <h2>{mode === "login" ? "Welcome back." : "Make yourself at home."}</h2>
+        <h2 ref={headingRef} tabIndex={-1}>
+          {mode === "login" ? "Welcome back." : "Make yourself at home."}
+        </h2>
         <p className="auth-intro">
           {mode === "login"
             ? "A little closer to your everyday favourites. Sign in to view your orders and keep shopping."
@@ -251,6 +364,15 @@ export default function AccountDialog({ onNavigate }) {
             )}
           </button>
         </form>
+        <button
+          className="account-support-link"
+          disabled={pending}
+          onClick={() => onNavigate("Contact")}
+        >
+          {mode === "login"
+            ? "Trouble signing in? Contact us"
+            : "Questions before joining? Contact us"}
+        </button>
         <p className="auth-security-note">
           <ShieldCheck aria-hidden="true" />
           Your account, your orders. Always in one place.
