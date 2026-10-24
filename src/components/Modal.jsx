@@ -14,9 +14,14 @@ export default function Modal({ children, drawer, onClose }) {
       if (e.key === "Tab") {
         const els = [
           ...ref.current.querySelectorAll(
-            "button,a[href],input,select,textarea",
+            "button,a[href],input,select,textarea,[tabindex]",
           ),
-        ];
+        ].filter(
+          (element) =>
+            !element.disabled &&
+            element.tabIndex >= 0 &&
+            element.getClientRects().length > 0,
+        );
         const first = els[0],
           last = els.at(-1);
         if (e.shiftKey && document.activeElement === first) {

@@ -196,3 +196,97 @@
   color: #9a5d44;
   margin-top: 5px;
 }
+
+.product-image {
+  border-radius: 5px;
+}
+.product-image .asset {
+  transition:
+    filter 0.3s,
+    transform 0.45s;
+}
+.product-image:hover .asset {
+  transform: scale(1.025);
+}
+.product-meta {
+  padding-top: 13px;
+}
+.product-name,
+.women-collection .product-name {
+  font-size: 13px;
+  line-height: 1.5;
+}
+.product-meta > span,
+.women-collection .product-meta > span {
+  font-size: 13px;
+  font-weight: 500;
+}
+.favorite {
+  width: 34px;
+  height: 34px;
+  top: 9px;
+  right: 9px;
+  display: grid;
+  place-items: center;
+  background: #f8f6f0c9;
+  border-radius: 50%;
+  backdrop-filter: blur(5px);
+}
+.badge {
+  font-size: 9px;
+  top: 12px;
+  left: 12px;
+  padding: 5px 9px;
+}
+.add-small,
+.home-grid .add-small {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  background: var(--paper);
+  transition: background 0.2s;
+}
+.add-small:hover {
+  background: var(--surface);
+}
+.add-small svg {
+  width: 16px;
+  height: 16px;
+}
+.quick {
+  font-size: 10px;
+  padding: 14px;
+}
+.product-bottom {
+  margin-top: 11px;
+}
+.product-stock {
+  font-size: 11px;
+}
+@media (max-width: 600px) {
+  .product-name,
+  .women-collection .product-name {
+    font-size: 12px;
+  }
+  .product-meta > span,
+  .women-collection .product-meta > span {
+    font-size: 12px;
+  }
+  .favorite {
+    width: 36px;
+    height: 36px;
+    top: 7px;
+    right: 7px;
+  }
+  .product-image .favorite svg {
+    width: 17px;
+    height: 17px;
+  }
+  .product-bottom {
+    gap: 8px;
+  }
+  .swatches,
+  .women-collection .swatches {
+    gap: 5px;
+  }
+}

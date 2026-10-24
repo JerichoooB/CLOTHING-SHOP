@@ -18,7 +18,11 @@ export default function Contact() {
     try {
       await sendContact(data);
       form.reset();
-      setStatus({ kind: "success", message: "Thanks! Your message has been submitted. We’ll reply to the email address you provided." });
+      setStatus({
+        kind: "success",
+        message:
+          "Thanks! Your message has been submitted. We’ll reply to the email address you provided.",
+      });
     } catch (error) {
       setStatus({ kind: "error", message: error.message });
     } finally {
@@ -28,37 +32,82 @@ export default function Contact() {
   }
   return (
     <section className="info section contact-page">
-      <p className="eyebrow">WE’RE HERE TO HELP</p>
-      <h1>Let’s get in touch.</h1>
-      <p>Questions about a piece? Leave a message below.</p>
-      <p>Prefer email? <a className="contact-email" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p>
+      <div className="contact-intro">
+        <p className="eyebrow">WE’RE HERE TO HELP</p>
+        <h1>Let’s get in touch.</h1>
+        <p>Questions about a piece? Leave a message below.</p>
+        <p>
+          Prefer email?{" "}
+          <a className="contact-email" href={`mailto:${CONTACT_EMAIL}`}>
+            {CONTACT_EMAIL}
+          </a>
+        </p>
+      </div>
       <form
         action={CONTACT_ENDPOINT}
         method="POST"
         onSubmit={submit}
         aria-busy={pending}
       >
-        <input type="hidden" name="_subject" value="New CLOVER contact message" />
+        <input
+          type="hidden"
+          name="_subject"
+          value="New CLOVER contact message"
+        />
         <div className="contact-honeypot" aria-hidden="true">
-          <label>Leave this field empty<input name="_gotcha" tabIndex={-1} autoComplete="off" /></label>
+          <label>
+            Leave this field empty
+            <input name="_gotcha" tabIndex={-1} autoComplete="off" />
+          </label>
         </div>
         <label>
           Your name
-          <input name="name" required minLength={2} maxLength={80} autoComplete="name" readOnly={pending} />
+          <input
+            name="name"
+            required
+            minLength={2}
+            maxLength={80}
+            autoComplete="name"
+            readOnly={pending}
+          />
         </label>
         <label>
           Email address
-          <input name="email" required type="email" maxLength={254} autoComplete="email" readOnly={pending} />
+          <input
+            name="email"
+            required
+            type="email"
+            maxLength={254}
+            autoComplete="email"
+            readOnly={pending}
+          />
         </label>
         <label>
           Message
-          <textarea name="message" required minLength={10} maxLength={5000} rows={5} readOnly={pending} />
+          <textarea
+            name="message"
+            required
+            minLength={10}
+            maxLength={5000}
+            rows={5}
+            readOnly={pending}
+          />
         </label>
         <p className="form-note">
-          Your name, email and message are sent through Formspree so we can respond to your enquiry.
+          Your name, email and message are sent through Formspree so we can
+          respond to your enquiry.
         </p>
-        {status && <p className={`contact-status contact-status-${status.kind}`} role={status.kind === "error" ? "alert" : "status"}>{status.message}</p>}
-        <button className="primary" disabled={pending}>{pending ? "SENDING…" : "SEND MESSAGE ⟶"}</button>
+        {status && (
+          <p
+            className={`contact-status contact-status-${status.kind}`}
+            role={status.kind === "error" ? "alert" : "status"}
+          >
+            {status.message}
+          </p>
+        )}
+        <button className="primary" disabled={pending}>
+          {pending ? "SENDING…" : "SEND MESSAGE ⟶"}
+        </button>
       </form>
     </section>
   );

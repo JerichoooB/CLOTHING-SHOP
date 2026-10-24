@@ -111,3 +111,7 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for the Vercel configuration, required enviro
 Manage Store includes a Sales analytics tab with 7-, 30-, and 90-day reports in Philippine time. Revenue includes shipping on approved, non-cancelled demo orders; reversed payments are excluded and shown separately. Reports include units sold, purchasing customers, average order value, daily figures, top products, current order status, and current inventory health. No real payments or profit tracking are implied.
 
 Stock monitoring displays one row per product. Select a size to see and adjust that size's stock or view its movement history; the selection remains after saving. Search supports product names and product/size SKUs. Low-stock filtering selects products with at least one low-stock size. No database migration is required for these management features.
+
+### Interface refresh
+
+The storefront keeps the ivory CLOVER palette and editorial imagery, with larger text and controls, a sticky header with mobile navigation, collapsible filters on mobile, size buttons in product details, and a free-shipping progress indicator in the bag. Checkout, account dialogs, contact, orders and analytics share updated form and card styling. Stock rows become individual product cards on phones while retaining the size selector and per-size history. The UI changes require no new environment variables or database migration.

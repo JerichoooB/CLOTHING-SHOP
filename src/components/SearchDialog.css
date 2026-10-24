@@ -14,3 +14,13 @@
     flex-direction: column;
   }
 }
+.search-form input {
+  min-height: 48px;
+  background: #fcfbf7;
+  font-size: 14px;
+}
+@media (max-width: 600px) {
+  .search-form input {
+    font-size: 16px;
+  }
+}

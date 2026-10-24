@@ -61,3 +61,68 @@
   margin: 0 0 18px;
   overflow-wrap: anywhere;
 }
+.detail {
+  gap: 32px;
+}
+.detail > .asset {
+  border-radius: 6px;
+}
+.detail > div > p:not(.eyebrow):not(.detail-copy):not(.detail-stock) {
+  font-size: 20px;
+  font-weight: 500;
+}
+.detail-copy {
+  font-size: 13px;
+  line-height: 1.9;
+}
+.detail-sizes {
+  border: 0;
+  padding: 0;
+  margin: 4px 0 18px;
+  width: 100%;
+}
+.detail-sizes legend {
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+.detail-sizes > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.detail-sizes button {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px;
+  font-size: 12px;
+}
+.detail-sizes button.selected {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: white;
+}
+.detail-sizes button:disabled {
+  text-decoration: line-through;
+}
+.detail-stock {
+  font-size: 11px;
+}
+.detail small {
+  font-size: 11px;
+  line-height: 1.7;
+}
+.detail .primary {
+  width: 100%;
+}
+@media (max-width: 600px) {
+  .detail > .asset {
+    height: auto;
+    aspect-ratio: 1;
+    max-height: 330px;
+  }
+  .detail h2 {
+    font-size: 32px;
+  }
+}

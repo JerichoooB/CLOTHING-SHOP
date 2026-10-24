@@ -81,3 +81,54 @@
 .account-panel h2 {
   overflow-wrap: anywhere;
 }
+.account-panel {
+  max-width: 440px;
+}
+.account-panel h2 {
+  font-size: 40px;
+}
+.auth-tabs {
+  gap: 0;
+  background: var(--surface);
+  padding: 4px;
+  border: 0;
+  border-radius: 6px;
+}
+.auth-tabs button {
+  flex: 1;
+  padding: 12px 10px;
+  font-size: 13px;
+  border-radius: 4px;
+  border: 0;
+}
+.auth-tabs .selected {
+  background: #fdfcf8;
+  box-shadow: 0 1px 5px #20211e0d;
+  border: 0;
+  color: var(--ink);
+}
+.auth-form input {
+  min-height: 48px;
+  background: #fdfcf8;
+  border-color: var(--line);
+}
+.auth-form label {
+  font-size: 13px;
+  gap: 9px;
+}
+.password-hint {
+  font-size: 11px;
+}
+.account-links {
+  gap: 8px;
+}
+.account-links button {
+  font-size: 13px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+.account-links button:hover {
+  background: var(--surface);
+}

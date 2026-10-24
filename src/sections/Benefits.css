@@ -68,3 +68,41 @@
     height: 22px;
   }
 }
+.benefits {
+  padding: 28px 6%;
+  border-bottom: 1px solid var(--line);
+}
+.benefits strong {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.7px;
+}
+.benefits small {
+  font-size: 11px;
+  color: var(--muted);
+}
+.benefits svg {
+  flex-shrink: 0;
+  color: var(--accent);
+}
+@media (max-width: 800px) {
+  .benefits {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 12px;
+    padding: 25px 5%;
+  }
+  .benefits > div {
+    justify-content: flex-start;
+    padding-left: 0;
+    gap: 10px;
+  }
+  .benefits > div:nth-child(2) {
+    border: 0;
+  }
+  .benefits strong {
+    font-size: 9px;
+  }
+  .benefits small {
+    font-size: 10px;
+  }
+}

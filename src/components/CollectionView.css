@@ -207,3 +207,56 @@
     padding-top: 15px;
   }
 }
+.collection {
+  padding-top: 28px;
+  padding-bottom: 48px;
+}
+.filters {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 30px;
+}
+.filters > div {
+  gap: 25px;
+}
+.filters > div > button {
+  font-size: 12px;
+  min-height: 40px;
+  padding: 10px 0;
+}
+.filters label,
+.women-collection .filters label {
+  font-size: 12px;
+}
+.filters select {
+  min-height: 36px;
+}
+.results {
+  font-size: 12px;
+}
+.pagination {
+  gap: 14px;
+  margin-top: 38px;
+}
+.pagination > button,
+.pagination > span {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+}
+.pagination > button:hover {
+  background: var(--surface);
+  border-radius: 50%;
+}
+@media (max-width: 600px) {
+  .filters > div {
+    gap: 20px;
+  }
+  .filters > div > button {
+    font-size: 12px;
+  }
+  .filters label {
+    font-size: 12px;
+  }
+}

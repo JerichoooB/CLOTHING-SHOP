@@ -46,3 +46,84 @@
 .bag-checkout {
   margin-bottom: 12px;
 }
+.bag-shipping {
+  background: var(--surface);
+  padding: 16px;
+  border-radius: 6px;
+  margin: 16px 0 4px;
+}
+.bag-shipping p {
+  font-size: 12px;
+  color: var(--accent);
+}
+.bag-shipping-track {
+  height: 4px;
+  border-radius: 4px;
+  background: #d9ddcf;
+  margin-top: 12px;
+  overflow: hidden;
+}
+.bag-shipping-track span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.25s;
+}
+.cart-item {
+  gap: 18px;
+  padding: 24px 0;
+}
+.cart-item > .asset {
+  flex-shrink: 0;
+  border-radius: 5px;
+  width: 94px;
+  height: 110px;
+}
+.cart-item h4 {
+  font-size: 14px;
+  font-weight: 500;
+}
+.cart-item p {
+  font-size: 14px;
+}
+.cart-item small {
+  font-size: 12px;
+  color: var(--muted);
+}
+.cart-item > div {
+  min-width: 0;
+}
+.cart-item > button {
+  min-width: 32px;
+  min-height: 32px;
+}
+.quantity {
+  gap: 0;
+  border: 1px solid var(--line);
+  width: fit-content;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.quantity button {
+  width: 34px;
+  height: 34px;
+  border: 0;
+  display: grid;
+  place-items: center;
+}
+.quantity span {
+  min-width: 28px;
+  text-align: center;
+}
+.subtotal {
+  font-size: 17px;
+}
+@media (max-width: 360px) {
+  .cart-item > .asset {
+    width: 72px;
+    height: 90px;
+  }
+  .cart-item {
+    gap: 10px;
+  }
+}

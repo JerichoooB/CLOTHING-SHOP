@@ -186,3 +186,90 @@
     font-size: 23px !important;
   }
 }
+.order-card {
+  border-color: var(--line);
+  border-radius: 10px;
+  padding: 28px;
+  background: #fcfbf7;
+  box-shadow: 0 3px 18px #252b2303;
+}
+.order-heading small {
+  font-size: 12px;
+}
+.order-status {
+  font-size: 11px;
+  padding: 8px 13px;
+}
+.order-payment {
+  font-size: 13px;
+}
+.order-line h3 {
+  font-size: 14px;
+}
+.order-line small {
+  font-size: 12px;
+}
+.order-line > .asset {
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+.order-line > strong {
+  font-size: 13px;
+}
+.order-details-toggle {
+  font-size: 12px;
+  min-height: 36px;
+}
+.order-details p,
+.order-customer {
+  font-size: 12px;
+}
+.order-update-form {
+  background: var(--surface);
+  margin: 24px -12px -12px;
+  padding: 20px;
+  border-radius: 6px;
+}
+.order-update-form label {
+  font-size: 12px;
+}
+.order-update-form input,
+.order-update-form select {
+  background: var(--paper);
+  min-height: 44px;
+}
+.order-timeline time,
+.order-details small {
+  font-size: 11px;
+}
+@media (max-width: 600px) {
+  .order-card {
+    padding: 20px;
+  }
+  .order-heading {
+    align-items: flex-start;
+  }
+  .order-payment {
+    font-size: 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .order-line {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .order-line > .asset {
+    width: 54px;
+    height: 64px;
+  }
+  .order-line > div {
+    flex: 1;
+    min-width: 100px;
+  }
+  .order-line h3 {
+    font-size: 12px;
+  }
+  .order-line small {
+    font-size: 11px;
+  }
+}

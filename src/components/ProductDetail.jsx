@@ -19,19 +19,24 @@ export default function ProductDetail({ product: p, onAdd }) {
           An everyday favourite, with a relaxed silhouette and a considered
           finish. Made to fit effortlessly into your wardrobe.
         </p>
-        <label>
-          Size
-          <select value={size} onChange={(e) => setSize(e.target.value)}>
+        <fieldset className="detail-sizes">
+          <legend>Select size</legend>
+          <div>
             {p.sizes.map((s) => (
-              <option
+              <button
                 key={s}
+                type="button"
+                aria-label={`Size ${s}`}
+                aria-pressed={size === s}
+                className={size === s ? "selected" : ""}
                 disabled={p.variants.find((v) => v.size === s)?.stock === 0}
+                onClick={() => setSize(s)}
               >
                 {s}
-              </option>
+              </button>
             ))}
-          </select>
-        </label>
+          </div>
+        </fieldset>
         <p className="detail-stock">
           {p.variants.find((v) => v.size === size)?.stock ?? 0} available · SKU{" "}
           {p.variants.find((v) => v.size === size)?.sku}
@@ -43,7 +48,7 @@ export default function ProductDetail({ product: p, onAdd }) {
         >
           ADD TO BAG ⟶
         </button>
-        <small>Free shipping on orders over ₱1,500</small>
+        <small>Free shipping from ₱1,500 · Returns within 7 days</small>
       </div>
     </div>
   );

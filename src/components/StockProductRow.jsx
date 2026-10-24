@@ -44,7 +44,7 @@ export default function StockProductRow({
   }
   return (
     <tr className="stock-product-row">
-      <td>
+      <td data-label="Product">
         <strong>{item.name}</strong>
         <small>
           Product ID {item.productId} · {item.sku}
@@ -53,7 +53,7 @@ export default function StockProductRow({
           {total} units across {item.variants.length} sizes
         </small>
       </td>
-      <td>
+      <td data-label="Select size">
         <select
           className="stock-size-select"
           aria-label={`Size for ${item.name}`}
@@ -72,7 +72,7 @@ export default function StockProductRow({
         </select>
         <small>{variant.sku}</small>
       </td>
-      <td>
+      <td data-label="Available stock">
         <span
           className={
             variant.stock <= variant.lowStockThreshold
@@ -86,7 +86,7 @@ export default function StockProductRow({
           Size {variant.size} · Low at {variant.lowStockThreshold}
         </small>
       </td>
-      <td>
+      <td data-label="Adjust selected size">
         <form key={variant.id} className="inventory-adjust" onSubmit={adjust}>
           <input
             type="number"
@@ -116,7 +116,7 @@ export default function StockProductRow({
           )}
         </form>
       </td>
-      <td>
+      <td data-label="Stock history">
         <button
           className="inventory-history"
           disabled={pending}

@@ -94,3 +94,44 @@
     padding-bottom: 14px;
   }
 }
+.story {
+  height: auto;
+  min-height: 320px;
+  padding-top: 12px;
+  padding-bottom: 44px;
+}
+.story > .asset {
+  min-height: 300px;
+  border-radius: 5px 0 0 5px;
+}
+.story > div {
+  padding: 40px 12%;
+  border-radius: 0 5px 5px 0;
+}
+.story h2 {
+  font-size: clamp(28px, 2.6vw, 40px);
+  white-space: normal;
+}
+.story p:not(.eyebrow) {
+  font-size: 13px;
+  line-height: 1.9;
+  margin-bottom: 22px;
+}
+.story .primary {
+  font-size: 10px;
+  min-height: 44px;
+  padding: 12px 20px;
+}
+@media (max-width: 600px) {
+  .story {
+    min-height: 0;
+  }
+  .story > .asset {
+    min-height: 230px;
+    border-radius: 5px 5px 0 0;
+  }
+  .story > div {
+    padding: 30px;
+    border-radius: 0 0 5px 5px;
+  }
+}

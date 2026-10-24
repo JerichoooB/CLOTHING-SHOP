@@ -34,3 +34,30 @@
     margin-top: 8px;
   }
 }
+.section-title {
+  margin-bottom: 26px;
+  gap: 20px;
+}
+.section-title h2 {
+  font-size: clamp(29px, 3vw, 44px);
+}
+.section-subtitle {
+  font-size: 12px;
+}
+.text-link {
+  font-size: 11px;
+  padding: 10px 0;
+  letter-spacing: 0.7px;
+}
+@media (max-width: 600px) {
+  .section-title {
+    align-items: center;
+    gap: 12px;
+  }
+  .section-title h2 {
+    font-size: 28px;
+  }
+  .text-link {
+    font-size: 10px;
+  }
+}

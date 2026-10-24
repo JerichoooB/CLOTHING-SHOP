@@ -19,3 +19,11 @@
   opacity: 1;
   transform: translate(-50%, 0);
 }
+#toast {
+  z-index: 120;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px #20211e26;
+  font-size: 13px;
+  padding: 16px 24px;
+  line-height: 1.6;
+}

@@ -10,10 +10,35 @@ export default function Bag({ onNavigate }) {
     const product = products.find((p) => p.id === item.id);
     return product ? [{ ...item, product }] : [];
   });
+  const subtotal = items.reduce(
+    (sum, item) => sum + item.product.price * item.qty,
+    0,
+  );
   return (
     <>
       <p className="eyebrow">YOUR EVERYDAY FAVOURITES</p>
       <h2>Shopping Bag</h2>
+      {items.length > 0 && (
+        <div className="bag-shipping">
+          <p>
+            {subtotal >= 1500
+              ? "Your order qualifies for free shipping."
+              : `${money(1500 - subtotal)} away from free shipping.`}
+          </p>
+          <div
+            className="bag-shipping-track"
+            role="progressbar"
+            aria-label="Progress toward free shipping"
+            aria-valuemin={0}
+            aria-valuemax={1500}
+            aria-valuenow={Math.min(subtotal, 1500)}
+          >
+            <span
+              style={{ width: `${Math.min(100, (subtotal / 1500) * 100)}%` }}
+            />
+          </div>
+        </div>
+      )}
       {status !== "ready" ? (
         <CatalogState />
       ) : items.length ? (
@@ -57,11 +82,7 @@ export default function Bag({ onNavigate }) {
       )}
       <div className="subtotal">
         <span>Subtotal</span>
-        <strong>
-          {money(
-            items.reduce((sum, item) => sum + item.product.price * item.qty, 0),
-          )}
-        </strong>
+        <strong>{money(subtotal)}</strong>
       </div>
       <p className="form-note">
         Checkout uses an automatically approved demo payment. No real money is

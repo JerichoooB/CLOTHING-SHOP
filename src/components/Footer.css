@@ -131,3 +131,56 @@ footer .brand .clover {
 .social-links {
   align-items: center;
 }
+footer {
+  padding: 48px 6% 24px;
+}
+.footer-main {
+  max-width: 1280px;
+  margin: auto;
+  padding-bottom: 35px;
+  gap: 40px;
+}
+.footer-main h4 {
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 14px;
+}
+.footer-main > div > a:not(.brand),
+.footer-main > div > button {
+  font-size: 12px;
+  line-height: 2.2;
+}
+.footer-main > div > a:hover,
+.footer-main > div > button:hover {
+  color: white;
+}
+.tagline {
+  font-size: 11px;
+  margin-top: 10px;
+}
+.footer-bottom {
+  max-width: 1280px;
+  margin: auto;
+  padding-top: 22px;
+  font-size: 10px;
+}
+.social-links {
+  gap: 20px;
+}
+@media (max-width: 600px) {
+  footer {
+    padding: 38px 6% 24px;
+  }
+  .footer-main {
+    gap: 28px;
+  }
+  .footer-main > div > a:not(.brand),
+  .footer-main > div > button {
+    font-size: 12px;
+  }
+  .footer-bottom {
+    font-size: 10px;
+    gap: 14px;
+    line-height: 1.7;
+  }
+}

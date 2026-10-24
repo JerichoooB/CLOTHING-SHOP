@@ -1,3 +1,38 @@
 .about-page h2 {
   margin-top: 22px;
 }
+.about-page {
+  max-width: 960px;
+  text-align: center;
+  padding-top: 70px;
+  padding-bottom: 75px;
+}
+.about-page h1 {
+  font-size: clamp(42px, 5vw, 66px);
+  line-height: 1.1;
+}
+.about-page > p:not(.eyebrow) {
+  font-size: 15px;
+  line-height: 1.9;
+  margin: 0 auto 36px;
+}
+.about-page > .asset {
+  border-radius: 8px;
+  margin: 36px 0;
+  height: 380px;
+}
+.about-page h2 {
+  font-size: 36px;
+  margin: 30px 0 24px;
+}
+@media (max-width: 600px) {
+  .about-page {
+    padding-top: 40px;
+  }
+  .about-page > .asset {
+    height: 240px;
+  }
+  .about-page > p:not(.eyebrow) {
+    font-size: 14px;
+  }
+}

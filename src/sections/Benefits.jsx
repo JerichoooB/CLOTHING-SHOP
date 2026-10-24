@@ -1,8 +1,8 @@
 import { Truck, ShieldCheck, RotateCcw, Leaf } from "lucide-react";
 import "./Benefits.css";
 const benefits = [
-  [Truck, "FREE SHIPPING", "On orders over ₱1,500"],
-  [ShieldCheck, "SECURE PAYMENTS", "Checkout coming soon"],
+  [Truck, "FREE SHIPPING", "On orders from ₱1,500"],
+  [ShieldCheck, "DEMO CHECKOUT", "No real money charged"],
   [RotateCcw, "EASY RETURNS", "Within 7 days"],
   [Leaf, "SUSTAINABLE CHOICES", "Better for the planet"],
 ];

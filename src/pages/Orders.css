@@ -32,3 +32,9 @@
     font-size: 39px;
   }
 }
+.orders-title h1 {
+  font-size: clamp(38px, 4vw, 56px);
+}
+.orders-page {
+  max-width: 1040px;
+}

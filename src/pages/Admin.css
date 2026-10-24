@@ -219,3 +219,213 @@
     padding-top: 30px;
   }
 }
+.admin-page {
+  max-width: 1280px;
+  padding-top: 48px;
+}
+.admin-page h1 {
+  font-size: clamp(34px, 4vw, 52px);
+}
+.admin-title {
+  margin-bottom: 30px;
+}
+.admin-title > button,
+.orders-title button {
+  padding: 10px 16px;
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: #fcfbf7;
+  text-decoration: none;
+}
+.admin-stats > div {
+  border-radius: 8px;
+  background: #f1f0e7;
+  padding: 22px;
+}
+.admin-stats span {
+  color: var(--muted);
+  font-size: 12px;
+}
+.admin-stats strong {
+  font-size: 34px;
+}
+.admin-tabs {
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  flex-wrap: wrap;
+  background: #eaece1;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 5px;
+  gap: 4px;
+  margin-bottom: 28px;
+}
+.admin-tabs button {
+  font-size: 12px;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 5px;
+  color: var(--muted);
+}
+.admin-tabs .selected {
+  background: #fcfbf7;
+  color: var(--ink);
+  border: 0;
+  box-shadow: 0 2px 5px #252b2309;
+}
+.admin-filters {
+  justify-content: space-between;
+  padding: 20px;
+  background: #f0f0e7;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.admin-filters > label {
+  font-size: 12px;
+}
+.admin-filters input:not([type="checkbox"]),
+.admin-filters select {
+  background: #fcfbf7;
+  min-height: 44px;
+}
+.inventory-table-wrap {
+  border-radius: 8px;
+  background: #fcfbf7;
+}
+.inventory-table th {
+  padding: 18px;
+  font-size: 11px;
+}
+.inventory-table td {
+  padding: 20px 18px;
+  font-size: 13px;
+}
+.inventory-table td > strong {
+  font-size: 13px;
+  font-weight: 500;
+}
+.inventory-table small {
+  font-size: 11px;
+  line-height: 1.7;
+}
+.inventory-adjust {
+  grid-template-columns: 85px minmax(120px, 1fr) auto;
+}
+.inventory-adjust input {
+  font-size: 12px;
+  min-height: 40px;
+  background: var(--paper);
+}
+.inventory-adjust button {
+  min-height: 40px;
+  border-radius: 4px;
+  padding: 8px 14px;
+  font-size: 12px;
+}
+.inventory-history {
+  font-size: 12px;
+  min-height: 36px;
+}
+.stock-low {
+  border-radius: 4px;
+  padding: 5px 10px;
+}
+.stock-history {
+  border-radius: 8px;
+}
+.stock-history small {
+  font-size: 11px;
+}
+@media (max-width: 700px) {
+  .admin-stats {
+    gap: 10px;
+  }
+  .admin-stats > div {
+    padding: 17px;
+  }
+  .admin-stats strong {
+    font-size: 29px;
+  }
+  .admin-stats span {
+    font-size: 11px;
+  }
+  .admin-tabs {
+    width: 100%;
+    gap: 3px;
+    flex-wrap: nowrap;
+  }
+  .admin-tabs button {
+    flex: 1;
+    font-size: 11px;
+    padding: 12px 6px;
+  }
+  .admin-filters {
+    padding: 16px;
+  }
+  .admin-filters > label {
+    width: 100%;
+  }
+  .admin-filters input:not([type="checkbox"]),
+  .admin-filters select {
+    min-width: 0;
+    width: 100%;
+  }
+  .inventory-table {
+    min-width: 0;
+    width: 100%;
+  }
+  .inventory-table thead {
+    display: none;
+  }
+  .inventory-table tbody {
+    display: grid;
+    gap: 14px;
+    padding: 12px;
+    background: #f0f0e7;
+  }
+  .inventory-table .stock-product-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 18px 12px;
+    padding: 20px 16px;
+    background: #fcfbf7;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+  .inventory-table .stock-product-row td {
+    border: 0;
+    padding: 0;
+    min-width: 0;
+  }
+  .stock-product-row td:first-child,
+  .stock-product-row td:nth-child(4),
+  .stock-product-row td:nth-child(5) {
+    grid-column: 1/-1;
+  }
+  .stock-product-row td:not(:first-child)::before {
+    content: attr(data-label);
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+    margin-bottom: 9px;
+  }
+  .inventory-adjust {
+    grid-template-columns: 90px minmax(0, 1fr);
+    gap: 8px;
+  }
+  .inventory-adjust button {
+    grid-column: 1/-1;
+  }
+  .inventory-adjust input {
+    font-size: 16px;
+  }
+  .stock-size-select {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    font-size: 14px;
+    min-height: 44px;
+  }
+}

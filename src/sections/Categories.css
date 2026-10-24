@@ -57,3 +57,34 @@
     bottom: 14px;
   }
 }
+.category {
+  border-radius: 5px;
+  aspect-ratio: 1;
+}
+.category:after {
+  content: "";
+  position: absolute;
+  inset: 35% 0 0;
+  background: linear-gradient(transparent, #11170f80);
+  pointer-events: none;
+}
+.category > div {
+  z-index: 1;
+  left: 22px;
+  bottom: 22px;
+}
+.category span:not(.asset) {
+  font-size: 10px;
+}
+@media (max-width: 600px) {
+  .category {
+    aspect-ratio: 0.86;
+  }
+  .category > div {
+    left: 14px;
+    bottom: 18px;
+  }
+  .category span:not(.asset) {
+    font-size: 9px;
+  }
+}
