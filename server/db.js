@@ -104,6 +104,21 @@ export async function initializeDatabase(database = pool) {
           );
       }
     }
+    const repriced = await client.query(
+      "SELECT 1 FROM schema_migrations WHERE version=2",
+    );
+    if (!repriced.rowCount) {
+      await client.query(
+        await readFile(
+          new URL(
+            "../database/migrations/002_catalog_prices.sql",
+            import.meta.url,
+          ),
+          "utf8",
+        ),
+      );
+      await client.query("INSERT INTO schema_migrations(version) VALUES(2)");
+    }
   });
 }
 export async function importLegacyAccounts(

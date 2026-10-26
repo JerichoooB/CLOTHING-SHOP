@@ -25,12 +25,12 @@ test("checkout is server-priced, atomic and idempotent; orders are private and a
     ]);
     assert.deepEqual(responses.map((r) => r.status).sort(), [200, 201]);
     const order = responses[0].data.order;
-    assert.equal(order.total, 1798);
-    assert.equal(order.shipping, 0);
+    assert.equal(order.total, 800);
+    assert.equal(order.shipping, 100);
     assert.equal(order.payment.status, "approved");
     assert.equal(order.payment.isSimulated, true);
     assert.equal(order.status, "pending");
-    assert.equal(order.items[0].unitPrice, 899);
+    assert.equal(order.items[0].unitPrice, 350);
     assert.equal(
       (
         await f.database.query(
@@ -208,7 +208,7 @@ test("cancellation restores stock once, reverses demo payment, and inventory adj
       cookie: customer.cookie,
       body: checkout([{ id: 4, size: "One size", qty: 2 }]),
     });
-    assert.equal(placed.data.order.total, 1298);
+    assert.equal(placed.data.order.total, 600);
     assert.equal(placed.data.order.shipping, 100);
     const id = placed.data.order.id,
       change = {

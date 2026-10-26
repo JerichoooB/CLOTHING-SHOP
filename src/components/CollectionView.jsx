@@ -27,14 +27,14 @@ export default function CollectionView({
         (!colorFilter || p.colors.includes(colorFilter)) &&
         (!priceFilter ||
           (priceFilter === "under"
-            ? p.price < 1000
+            ? p.price >= 150 && p.price < 300
             : priceFilter === "mid"
-              ? p.price >= 1000 && p.price <= 1500
+              ? p.price >= 300 && p.price < 450
               : priceFilter === "upper"
-                ? p.price > 1500 && p.price <= 2500
+                ? p.price >= 450 && p.price < 600
                 : priceFilter === "premium"
-                  ? p.price > 2500 && p.price <= 4000
-                  : p.price > 4000)) &&
+                  ? p.price >= 600 && p.price <= 700
+                  : false)) &&
         p.name.toLowerCase().includes(query.toLowerCase()),
     )
     .sort((a, b) =>

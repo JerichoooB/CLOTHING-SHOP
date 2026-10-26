@@ -93,11 +93,10 @@ export default function WomenFilters({
         <div className="sidebar-group">
           <h4>PRICE</h4>
           {[
-            ["under", "Under ₱1,000"],
-            ["mid", "₱1,000 – ₱1,500"],
-            ["upper", "₱1,500 – ₱2,500"],
-            ["premium", "₱2,500 – ₱4,000"],
-            ["luxury", "Over ₱4,000"],
+            ["under", "₱150 – ₱299"],
+            ["mid", "₱300 – ₱449"],
+            ["upper", "₱450 – ₱599"],
+            ["premium", "₱600 – ₱700"],
           ].map(([v, t]) => (
             <label className="price-option" key={v}>
               <input
