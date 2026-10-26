@@ -4,6 +4,7 @@ import {
   Settings2,
   CheckCircle2,
   ShoppingBag,
+  Heart,
   LogOut,
   Mail,
   ArrowRight,
@@ -17,7 +18,7 @@ import { api } from "../lib/api";
 import { useStore } from "../context/StoreContext";
 import "./AccountDialog.css";
 export default function AccountDialog({ onNavigate }) {
-  const { user, setUser, authLoading, notify } = useStore();
+  const { user, setUser, authLoading, notify, likes } = useStore();
   const [mode, setMode] = useState("login"),
     [error, setError] = useState(""),
     [pending, setPending] = useState(false),
@@ -128,6 +129,16 @@ export default function AccountDialog({ onNavigate }) {
             {user.email}
           </p>
           <div className="account-action-cards">
+            <button disabled={pending} onClick={() => onNavigate("Saved")}>
+              <span className="account-action-icon">
+                <Heart />
+              </span>
+              <span>
+                <strong>Saved pieces</strong>
+                <small>{likes.length} favourites saved on this device</small>
+              </span>
+              <ArrowRight />
+            </button>
             <button disabled={pending} onClick={() => onNavigate("Orders")}>
               <span className="account-action-icon">
                 <Package />

@@ -3,7 +3,7 @@ import Benefits from "../sections/Benefits";
 import Categories from "../sections/Categories";
 import FeaturedProducts from "../sections/FeaturedProducts";
 import Story from "../sections/Story";
-import Newsletter from "../sections/Newsletter";
+import StayConnected from "../sections/StayConnected";
 import "./Home.css";
 export default function Home({ onNavigate }) {
   return (
@@ -13,7 +13,7 @@ export default function Home({ onNavigate }) {
       <Categories onNavigate={onNavigate} />
       <FeaturedProducts onNavigate={onNavigate} />
       <Story onNavigate={onNavigate} />
-      <Newsletter />
+      <StayConnected onNavigate={onNavigate} />
     </div>
   );
 }

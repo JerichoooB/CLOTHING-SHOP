@@ -1,14 +1,23 @@
 import { X } from "lucide-react";
 import { useRef, useEffect } from "react";
 import "./Modal.css";
-export default function Modal({ children, drawer, onClose }) {
+export default function Modal({
+  children,
+  drawer,
+  onClose,
+  label = "Clover details",
+}) {
   const ref = useRef();
   const closeRef = useRef(onClose);
   closeRef.current = onClose;
   useEffect(() => {
     const previous = document.activeElement;
+    const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    ref.current.querySelector("button")?.focus();
+    (
+      ref.current.querySelector("[data-autofocus]") ||
+      ref.current.querySelector("button")
+    )?.focus();
     function key(e) {
       if (e.key === "Escape") closeRef.current();
       if (e.key === "Tab") {
@@ -24,6 +33,15 @@ export default function Modal({ children, drawer, onClose }) {
         );
         const first = els[0],
           last = els.at(-1);
+        if (!els.length) {
+          e.preventDefault();
+          return;
+        }
+        if (!ref.current.contains(document.activeElement)) {
+          e.preventDefault();
+          (e.shiftKey ? last : first).focus();
+          return;
+        }
         if (e.shiftKey && document.activeElement === first) {
           e.preventDefault();
           last.focus();
@@ -35,7 +53,7 @@ export default function Modal({ children, drawer, onClose }) {
     }
     document.addEventListener("keydown", key);
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = originalOverflow;
       document.removeEventListener("keydown", key);
       previous?.focus();
     };
@@ -52,7 +70,7 @@ export default function Modal({ children, drawer, onClose }) {
         className={`modal ${drawer ? "drawer" : ""}`}
         role="dialog"
         aria-modal="true"
-        aria-label="Clover details"
+        aria-label={label}
       >
         <button className="close" aria-label="Close" onClick={onClose}>
           <X />

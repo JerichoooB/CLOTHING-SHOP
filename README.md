@@ -87,14 +87,14 @@ npm start
 Each visible page and section has co-located JSX/CSS:
 
 - `src/pages/`: Home, Shop, Men, Women, Unisex, Accessories, About, Contact, Checkout, Orders, Admin.
-- `src/sections/`: Benefits, Categories, FeaturedProducts, Story, Newsletter.
+- `src/sections/`: Benefits, Categories, FeaturedProducts, Story, StayConnected.
 - `src/components/`: shared layout, catalog, account, bag, order-card and pagination components.
 - `src/context/StoreContext.jsx`: catalog, bag, account and notification state.
 - `server/`: PostgreSQL connection/migration/seed, authentication, catalog queries, checkout and admin APIs.
 - `database/`: SQL migration and schema documentation.
 - `scripts/`: local database startup, setup, admin promotion, development process launcher.
 
-All generated photos and the shared compact five-leaf logo live in `public/images`. Fonts are local too. The layouts follow the supplied Clover references, with generated photographic recreations. Contact messages are submitted to Formspree; newsletter signup remains unconnected. Fulfillment status and tracking are managed manually; no carrier service is connected.
+All generated photos and the shared compact five-leaf logo live in `public/images`. Fonts are local too. The layouts follow the supplied Clover references, with generated photographic recreations. Contact messages are submitted to Formspree. The home contact action replaces the inactive newsletter form. Fulfillment status and tracking are managed manually; no carrier service is connected.
 
 ## Contact delivery
 
@@ -121,3 +121,7 @@ The signed-in account panel includes order/store shortcuts, contact support, and
 Catalog prices now range from PHP150 to PHP700. Migration `002_catalog_prices.sql` updates existing catalog product prices once during `db:setup` (including the Vercel build), without changing stock, users, historical order item prices or payment totals. New checkouts use the updated product prices; price filters use the new range.
 
 Home, Shop, Men, Women, Unisex and Accessories now use person-free top banners composed from existing garment/accessory product photos. Each banner has a page-specific title, collection label, description, labelled product inspiration and shopping action; collection breadcrumbs and product anchors remain functional on mobile and desktop.
+
+### Shopping reliability and saved pieces
+
+Saved pieces have their own page, persist in browser storage, and sync between tabs on the same device. They are not account-synced across devices. Search trims queries, rejects blank searches, offers suggestions and includes a reset action when no products match. The catalog displays its real result count instead of disabled pagination. Bag updates guard rapid repeated clicks against the available-size limit, and dialogs have descriptive labels and recover keyboard focus after content changes.

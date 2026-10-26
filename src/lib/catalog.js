@@ -2,6 +2,7 @@ export const categories = ["Men", "Women", "Unisex", "Accessories"];
 export const pages = [
   "Home",
   "Shop",
+  "Saved",
   ...categories,
   "About",
   "Contact",

@@ -1,6 +1,19 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { api } from "../lib/api";
 const Context = createContext(null);
+function readLikes() {
+  try {
+    const ids = JSON.parse(localStorage.getItem("clover-saved") || "[]");
+    return Array.isArray(ids)
+      ? [...new Set(ids.filter((id) => Number.isInteger(id) && id >= 0))].slice(
+          0,
+          1000,
+        )
+      : [];
+  } catch {
+    return [];
+  }
+}
 function readBag() {
   try {
     const value = JSON.parse(localStorage.getItem("clover-cart") || "[]");
@@ -21,12 +34,19 @@ export function StoreProvider({ children }) {
   const [products, setProducts] = useState([]),
     [status, setStatus] = useState("loading"),
     [bag, setBag] = useState(readBag),
-    [likes, setLikes] = useState([]),
+    [likes, setLikes] = useState(readLikes),
     [modal, setModal] = useState(null),
     [toast, setToast] = useState(""),
     [user, setUser] = useState(null),
     [authLoading, setAuthLoading] = useState(true);
   const timer = useRef();
+  const bagRef = useRef(bag);
+  bagRef.current = bag;
+  function updateBag(change) {
+    const next = change(bagRef.current);
+    bagRef.current = next;
+    setBag(next);
+  }
   async function load() {
     setStatus("loading");
     try {
@@ -59,6 +79,19 @@ export function StoreProvider({ children }) {
       localStorage.setItem("clover-cart", JSON.stringify(bag));
     } catch {}
   }, [bag]);
+  useEffect(() => {
+    try {
+      localStorage.setItem("clover-saved", JSON.stringify(likes));
+    } catch {}
+  }, [likes]);
+  useEffect(() => {
+    const update = (event) => {
+      if (event.key === "clover-saved" || event.key === null)
+        setLikes(readLikes());
+    };
+    window.addEventListener("storage", update);
+    return () => window.removeEventListener("storage", update);
+  }, []);
   function notify(message) {
     setToast(message);
     clearTimeout(timer.current);
@@ -68,8 +101,9 @@ export function StoreProvider({ children }) {
     const stock =
       product.variants?.find((variant) => variant.size === size)?.stock ?? 0;
     const existing =
-      bag.find((item) => item.id === product.id && item.size === size)?.qty ??
-      0;
+      bagRef.current.find(
+        (item) => item.id === product.id && item.size === size,
+      )?.qty ?? 0;
     if (existing >= Math.min(stock, 99)) {
       notify(
         stock === 0
@@ -78,7 +112,7 @@ export function StoreProvider({ children }) {
       );
       return;
     }
-    setBag((old) => {
+    updateBag((old) => {
       const found = old.find(
         (item) => item.id === product.id && item.size === size,
       );
@@ -91,7 +125,9 @@ export function StoreProvider({ children }) {
     notify("Added to your bag");
   }
   function quantity(id, size, delta) {
-    const current = bag.find((item) => item.id === id && item.size === size);
+    const current = bagRef.current.find(
+      (item) => item.id === id && item.size === size,
+    );
     const stock =
       products
         .find((product) => product.id === id)
@@ -100,7 +136,7 @@ export function StoreProvider({ children }) {
       notify("No more stock is available for this size.");
       return;
     }
-    setBag((old) =>
+    updateBag((old) =>
       old
         .map((item) =>
           item.id === id && item.size === size
@@ -111,7 +147,7 @@ export function StoreProvider({ children }) {
     );
   }
   function completeCheckout(items) {
-    setBag((old) =>
+    updateBag((old) =>
       old
         .map((item) => {
           const bought = items.find(
@@ -123,7 +159,7 @@ export function StoreProvider({ children }) {
     );
   }
   const remove = (id, size) =>
-    setBag((old) =>
+    updateBag((old) =>
       old.filter((item) => !(item.id === id && item.size === size)),
     );
   const toggleLike = (id) =>

@@ -18,6 +18,7 @@ import Unisex from "./pages/Unisex";
 import Accessories from "./pages/Accessories";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import Saved from "./pages/Saved";
 import usePage from "./hooks/usePage";
 import { useStore } from "./context/StoreContext";
 const pageComponents = {
@@ -32,6 +33,7 @@ const pageComponents = {
   Accessories,
   About,
   Contact,
+  Saved,
 };
 export default function App() {
   const [page, navigate] = usePage(),
@@ -59,7 +61,21 @@ export default function App() {
       </main>
       <Footer onNavigate={go} />
       {modal && (
-        <Modal drawer={modal.type === "bag"} onClose={() => setModal(null)}>
+        <Modal
+          label={
+            modal.type === "bag"
+              ? "Shopping bag"
+              : modal.type === "account"
+                ? "Clover account"
+                : modal.type === "search"
+                  ? "Search the collection"
+                  : modal.type === "product"
+                    ? modal.product.name
+                    : modal.title || "Clover details"
+          }
+          drawer={modal.type === "bag"}
+          onClose={() => setModal(null)}
+        >
           {modal.type === "product" ? (
             <ProductDetail
               product={modal.product}

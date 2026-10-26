@@ -22,7 +22,7 @@ export default function Footer({ onNavigate }) {
         </div>
         <div>
           <h4>Quick Links</h4>
-          {["Home", "Shop", "About", "Contact"].map((name) => (
+          {["Home", "Shop", "Saved", "About", "Contact"].map((name) => (
             <a
               key={name}
               href={"#" + name.toLowerCase()}
@@ -74,7 +74,7 @@ export default function Footer({ onNavigate }) {
           onClick={() =>
             help(
               "Privacy Policy",
-              "Your bag is stored in this browser. The store saves your account details, shipping details, orders and simulated payment records. Contact messages, names and email addresses are sent through Formspree. Newsletter signup is not connected.",
+              "Your bag and saved pieces are stored in this browser. The store saves your account details, shipping details, orders and simulated payment records. Contact messages, names and email addresses are sent through Formspree.",
             )
           }
         >

@@ -51,6 +51,7 @@ export default function Header({ page, onNavigate }) {
           {[
             "Home",
             "Shop",
+            "Saved",
             "About",
             "Contact",
             ...(user ? ["Orders"] : []),

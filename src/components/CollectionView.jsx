@@ -111,17 +111,25 @@ export default function CollectionView({
             <>
               <ProductGrid products={list} />
               {!list.length ? (
-                <p className="empty">No pieces found. Try another filter.</p>
-              ) : (
-                <div className="pagination" aria-label="Catalog page">
-                  <button disabled aria-label="Previous page">
-                    ←
-                  </button>
-                  <span aria-current="page">1</span>
-                  <button disabled aria-label="Next page">
-                    →
+                <div className="collection-empty">
+                  <p>No pieces found. Try a different search or filter.</p>
+                  <button
+                    className="primary"
+                    onClick={() => {
+                      setFilter("All");
+                      setSizeFilter("");
+                      setColorFilter("");
+                      setPriceFilter("");
+                      onClearSearch?.();
+                    }}
+                  >
+                    RESET FILTERS
                   </button>
                 </div>
+              ) : (
+                <p className="catalog-result-count">
+                  Showing all {list.length} pieces
+                </p>
               )}
             </>
           ) : (
