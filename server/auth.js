@@ -7,6 +7,8 @@ import {
   createHash,
 } from "node:crypto";
 import { promisify } from "node:util";
+import { transaction } from "./db.js";
+import { fail } from "./security.js";
 const scrypt = promisify(scryptCallback),
   cookieName = "clover_session",
   sessionLifetime = 8 * 60 * 60 * 1000;
@@ -68,14 +70,26 @@ export function createAuthRouter(database) {
   }
   async function issue(req, res, user) {
     const value = randomBytes(32).toString("hex");
-    await database.query(
-      "DELETE FROM sessions WHERE expires_at<=now() OR token_hash=$1",
-      [hash(token(req))],
-    );
-    await database.query(
-      "INSERT INTO sessions(token_hash,user_id,expires_at) VALUES($1,$2,$3)",
-      [hash(value), user.id, new Date(Date.now() + sessionLifetime)],
-    );
+    await transaction(database, async (client) => {
+      const current = await client.query(
+        "SELECT password_hash FROM users WHERE id=$1 FOR UPDATE",
+        [user.id],
+      );
+      if (
+        !current.rowCount ||
+        (user.password_hash &&
+          current.rows[0].password_hash !== user.password_hash)
+      )
+        fail(401, "Email or password is incorrect.");
+      await client.query(
+        "DELETE FROM sessions WHERE expires_at<=now() OR token_hash=$1",
+        [hash(token(req))],
+      );
+      await client.query(
+        "INSERT INTO sessions(token_hash,user_id,expires_at) VALUES($1,$2,$3)",
+        [hash(value), user.id, new Date(Date.now() + sessionLifetime)],
+      );
+    });
     res.cookie(cookieName, value, {
       ...cookieOptions(req),
       maxAge: sessionLifetime,
@@ -116,11 +130,9 @@ export function createAuthRouter(database) {
       );
     } catch (error) {
       if (error.code === "23505")
-        return res
-          .status(409)
-          .json({
-            error: "An account with this email already exists. Please log in.",
-          });
+        return res.status(409).json({
+          error: "An account with this email already exists. Please log in.",
+        });
       throw error;
     }
     return res

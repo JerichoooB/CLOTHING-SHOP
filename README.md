@@ -125,3 +125,7 @@ Home, Shop, Men, Women, Unisex and Accessories now use person-free top banners c
 ### Shopping reliability and saved pieces
 
 Saved pieces have their own page, persist in browser storage, and sync between tabs on the same device. They are not account-synced across devices. Search trims queries, rejects blank searches, offers suggestions and includes a reset action when no products match. The catalog displays its real result count instead of disabled pagination. Bag updates guard rapid repeated clicks against the available-size limit, and dialogs have descriptive labels and recover keyboard focus after content changes.
+
+### Receipts and password recovery
+
+Order confirmation and history include a private, printable receipt, with browser Save as PDF support. Receipt totals use immutable order snapshots and identify simulated payments. Password recovery is available from the login dialog and uses single-use 15-minute emailed links, hashed token storage, persistent request limits, and session revocation after a password change. Configure `GMAIL_USER`, `GMAIL_APP_PASSWORD`, and `PUBLIC_APP_URL` privately in Vercel Production; see DEPLOYMENT.md for setup and live delivery checks. Migration 003 adds recovery tokens/rate limits while preserving existing accounts and orders.

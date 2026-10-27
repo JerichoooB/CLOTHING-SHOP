@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { createPool, initializeDatabase } from "./db.js";
 import { createApp } from "./app.js";
-export async function fixture() {
+export async function fixture(options = {}) {
   const root = createPool(),
     schema = "clover_test_" + randomUUID().replaceAll("-", "");
   await root.query(`CREATE SCHEMA "${schema}"`);
@@ -9,7 +9,7 @@ export async function fixture() {
   await initializeDatabase(database);
   let server, base;
   async function start() {
-    server = createApp({ pool: database }).listen(0, "127.0.0.1");
+    server = createApp({ ...options, pool: database }).listen(0, "127.0.0.1");
     await new Promise((resolve) => server.once("listening", resolve));
     base = `http://127.0.0.1:${server.address().port}`;
   }

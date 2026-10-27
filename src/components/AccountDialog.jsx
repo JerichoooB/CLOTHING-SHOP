@@ -14,12 +14,15 @@ import {
 } from "lucide-react";
 import Asset from "./Asset";
 import PasswordField from "./PasswordField";
+import ForgotPassword from "./ForgotPassword";
 import { api } from "../lib/api";
 import { useStore } from "../context/StoreContext";
 import "./AccountDialog.css";
-export default function AccountDialog({ onNavigate }) {
+export default function AccountDialog({ onNavigate, initialMode }) {
   const { user, setUser, authLoading, notify, likes } = useStore();
-  const [mode, setMode] = useState("login"),
+  const [mode, setMode] = useState(
+      initialMode === "forgot" ? "forgot" : "login",
+    ),
     [error, setError] = useState(""),
     [pending, setPending] = useState(false),
     [signedOut, setSignedOut] = useState(false);
@@ -234,6 +237,13 @@ export default function AccountDialog({ onNavigate }) {
         </button>
       </div>
     );
+  if (mode === "forgot")
+    return (
+      <ForgotPassword
+        onBack={() => switchMode("login")}
+        onNavigate={onNavigate}
+      />
+    );
   return (
     <div className="auth-layout">
       <aside className="auth-editorial" aria-label="Clover essentials">
@@ -338,6 +348,16 @@ export default function AccountDialog({ onNavigate }) {
               mode === "register" ? "Use at least 8 characters." : undefined
             }
           />
+          {mode === "login" && (
+            <button
+              type="button"
+              className="auth-forgot"
+              disabled={pending}
+              onClick={() => switchMode("forgot")}
+            >
+              Forgot password?
+            </button>
+          )}
           {mode === "register" && (
             <PasswordField
               label="Confirm password"

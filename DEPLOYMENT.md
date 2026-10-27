@@ -106,3 +106,23 @@ npm run dev
 ```
 
 The transfer reads the preserved Docker credentials from `.local/local-settings/pre-neon.env`, backs up that local database, and copies it to the empty Neon destination using the direct URL. Do not run `db:setup` or deploy to Vercel before transferring into Neon: schema setup would make the destination nonempty. Once transfer succeeds, the app can use Neon's pooled URL for runtime queries. Verify registration/login, checkout, stock, orders and admin status updates against the hosted database. Your original Docker database remains intact, but later changes in it do not sync to Neon automatically.
+
+## Password recovery with Gmail
+
+Add these server-only variables to Vercel **Production**, then deploy/redeploy:
+
+| Variable | Value |
+| --- | --- |
+| `GMAIL_USER` | `jerichobalayog2@gmail.com` (the Gmail account sending reset mail) |
+| `GMAIL_APP_PASSWORD` | A Google App Password for that Gmail account, not the normal account password |
+| `PUBLIC_APP_URL` | `https://clovercloth.vercel.app` |
+
+Enable Google 2-Step Verification, then create an App Password at `https://myaccount.google.com/apppasswords`. Some managed accounts do not offer App Passwords; in that case use an SMTP provider with `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, and optionally `SMTP_FROM`. Gmail defaults are `smtp.gmail.com`, port `465`, TLS. Keep all passwords in private environment settings, never Git or chat. Google App Password grouping spaces are removed automatically. `SMTP_USER`/`SMTP_PASS` remain supported aliases when the Gmail variables are absent.
+
+The Vercel build runs migration 003 automatically. Recovery stores only hashed 256-bit reset tokens, uses 15-minute expiry and one-time consumption, applies PostgreSQL-backed request limits, and revokes all of the user's sessions after a password change. A new request invalidates prior outstanding links; repeated requests within one minute do not send another mail. Public responses do not reveal whether an email exists. If mail delivery fails after a configured request, the response remains generic and a sanitized server log notes the failure. Check Vercel runtime logs and SMTP settings if no email arrives. No raw reset tokens or passwords are logged or returned by the API.
+
+After deployment is Ready, use **Account → Forgot password?** with an existing account. Check Gmail/spam, open the link, choose a new password, and log in. Receiving a real email is the final live verification; automated tests use a captured sender and never send real reset links. The application works without SMTP configuration, but recovery reports unavailable until those variables are set.
+
+## Order receipts
+
+After checkout, use **View receipt** on the confirmation order card. Receipts are also available in **My Orders** and administrator order cards. **Print / Save PDF** opens the browser print dialog; choose Save as PDF to download a copy. Receipts use the order's saved item prices and totals, not today's catalog prices. Customers can access only their own receipts; administrators can access store orders. These are clearly labelled demo order receipts, not tax invoices or proof of a real payment. Receipt emails are not sent automatically.

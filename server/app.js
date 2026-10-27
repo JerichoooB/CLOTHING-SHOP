@@ -6,7 +6,8 @@ import { createAuthRouter, sessionMiddleware } from "./auth.js";
 import { sameOrigin } from "./security.js";
 import { listProducts } from "./products.js";
 import { commerceRouter, adminRouter } from "./orders.js";
-export function createApp({ pool = defaultPool } = {}) {
+import { createPasswordResetRouter } from "./password-reset.js";
+export function createApp({ pool = defaultPool, passwordReset } = {}) {
   const app = express();
   app.disable("x-powered-by");
   app.use(express.json({ limit: "32kb" }));
@@ -16,6 +17,7 @@ export function createApp({ pool = defaultPool } = {}) {
     res.json({ status: "ok", database: "postgresql" });
   });
   app.use("/api/auth", createAuthRouter(pool));
+  app.use("/api/auth", createPasswordResetRouter(pool, passwordReset));
   app.use("/api/admin", adminRouter(pool));
   app.get("/api/products", async (_req, res) =>
     res.json(await listProducts(pool)),

@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { pages } from "../lib/catalog";
 const readPage = () =>
-  pages.find((page) => page.toLowerCase() === location.hash.slice(1)) || "Home";
+  pages.find(
+    (page) => page.toLowerCase() === location.hash.slice(1).split("?")[0],
+  ) || "Home";
 export default function usePage() {
   const [page, setPage] = useState(readPage);
   useEffect(() => {

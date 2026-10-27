@@ -119,6 +119,21 @@ export async function initializeDatabase(database = pool) {
       );
       await client.query("INSERT INTO schema_migrations(version) VALUES(2)");
     }
+    const recovery = await client.query(
+      "SELECT 1 FROM schema_migrations WHERE version=3",
+    );
+    if (!recovery.rowCount) {
+      await client.query(
+        await readFile(
+          new URL(
+            "../database/migrations/003_password_reset.sql",
+            import.meta.url,
+          ),
+          "utf8",
+        ),
+      );
+      await client.query("INSERT INTO schema_migrations(version) VALUES(3)");
+    }
   });
 }
 export async function importLegacyAccounts(

@@ -35,3 +35,5 @@ erDiagram
 Foreign keys, unique email/SKU/size/request-ID constraints, nonnegative stock/amount checks and allowed status checks protect data. Checkout prices come from the database, not the browser. Row locks prevent overselling; per-customer locking and unique request IDs make repeated checkout safe. Changes to stock, orders and simulated payment records commit together. Cancellation takes an order lock before restoring stock and records an audit movement.
 
 The SQL schema supports only the simulated payment provider in this version. Approved means the **demo payment** passed, not that money was collected. Production payment gateways and shipment integrations are outside this implementation.
+
+Password recovery (migration 003) adds `password_reset_tokens` (hashed token, user, expiry, usage timestamp) and `password_reset_limits` (hashed request key, rolling window start, attempts). Order receipts are derived from stored orders/order items/payments; no duplicated receipt totals are stored.

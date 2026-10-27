@@ -3,6 +3,7 @@ export const pages = [
   "Home",
   "Shop",
   "Saved",
+  "ResetPassword",
   ...categories,
   "About",
   "Contact",

@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { FileText } from "lucide-react";
+import { useStore } from "../context/StoreContext";
 import Asset from "./Asset";
 import { money } from "../lib/catalog";
 import "./OrderCard.css";
@@ -22,6 +24,7 @@ const when = (value) =>
     timeStyle: "short",
   });
 export default function OrderCard({ order, admin = false, onUpdate }) {
+  const { setModal } = useStore();
   const [next, setNext] = useState(""),
     [note, setNote] = useState(""),
     [tracking, setTracking] = useState(order.trackingNumber || ""),
@@ -90,13 +93,27 @@ export default function OrderCard({ order, admin = false, onUpdate }) {
           Tracking reference: {order.trackingNumber}
         </p>
       )}
-      <button
-        className="order-details-toggle"
-        aria-expanded={expanded}
-        onClick={() => setExpanded(!expanded)}
-      >
-        {expanded ? "Hide" : "View"} delivery details & status history
-      </button>
+      <div className="order-actions">
+        <button
+          className="order-details-toggle"
+          aria-expanded={expanded}
+          onClick={() => setExpanded(!expanded)}
+        >
+          {expanded ? "Hide" : "View"} delivery details & status history
+        </button>
+        <button
+          className="order-receipt-button"
+          onClick={() =>
+            setModal({
+              type: "receipt",
+              orderId: order.id,
+              title: "Order receipt",
+            })
+          }
+        >
+          <FileText aria-hidden="true" /> View receipt
+        </button>
+      </div>
       {expanded && (
         <div className="order-details">
           <div>

@@ -19,6 +19,8 @@ import Accessories from "./pages/Accessories";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Saved from "./pages/Saved";
+import ResetPassword from "./pages/ResetPassword";
+import Receipt from "./components/Receipt";
 import usePage from "./hooks/usePage";
 import { useStore } from "./context/StoreContext";
 const pageComponents = {
@@ -34,13 +36,23 @@ const pageComponents = {
   About,
   Contact,
   Saved,
+  ResetPassword,
 };
 export default function App() {
   const [page, navigate] = usePage(),
     [query, setQuery] = useState("");
   const { modal, setModal, add } = useStore();
   useEffect(() => {
-    document.title = `${page} — CLOVER`;
+    const closeOnNavigation = () => setModal(null);
+    window.addEventListener("hashchange", closeOnNavigation);
+    window.addEventListener("popstate", closeOnNavigation);
+    return () => {
+      window.removeEventListener("hashchange", closeOnNavigation);
+      window.removeEventListener("popstate", closeOnNavigation);
+    };
+  }, [setModal]);
+  useEffect(() => {
+    document.title = `${page === "ResetPassword" ? "Reset password" : page} — CLOVER`;
   }, [page]);
   function go(name, search = "") {
     setQuery(search);
@@ -76,7 +88,9 @@ export default function App() {
           drawer={modal.type === "bag"}
           onClose={() => setModal(null)}
         >
-          {modal.type === "product" ? (
+          {modal.type === "receipt" ? (
+            <Receipt orderId={modal.orderId} />
+          ) : modal.type === "product" ? (
             <ProductDetail
               product={modal.product}
               onAdd={(size) => add(modal.product, size)}
@@ -84,7 +98,7 @@ export default function App() {
           ) : modal.type === "search" ? (
             <SearchDialog onSearch={(search) => go("Shop", search)} />
           ) : modal.type === "account" ? (
-            <AccountDialog onNavigate={go} />
+            <AccountDialog onNavigate={go} initialMode={modal.mode} />
           ) : modal.type === "bag" ? (
             <Bag onNavigate={go} />
           ) : (

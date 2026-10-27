@@ -249,6 +249,15 @@ export function commerceRouter(database) {
   router.get("/orders", async (req, res) =>
     res.json(await listOrders(database, req.query, req.user.id)),
   );
+  router.get("/orders/:id/receipt", async (req, res) => {
+    if (!UUID.test(req.params.id)) fail(404, "Receipt not found.");
+    const found = await database.query(
+      "SELECT id FROM orders WHERE id=$1 AND (user_id=$2 OR $3::boolean)",
+      [req.params.id, req.user.id, req.user.role === "admin"],
+    );
+    if (!found.rowCount) fail(404, "Receipt not found.");
+    return res.json({ order: await getOrder(database, req.params.id) });
+  });
   router.get("/orders/:id", async (req, res) => {
     if (!UUID.test(req.params.id)) fail(404, "Order not found.");
     const found = await database.query(
