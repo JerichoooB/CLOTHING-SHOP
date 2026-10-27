@@ -39,3 +39,5 @@ The SQL schema supports only the simulated payment provider in this version. App
 Password recovery (migration 003) adds `password_reset_tokens` (hashed token, user, expiry, usage timestamp) and `password_reset_limits` (hashed request key, rolling window start, attempts). Order receipts are derived from stored orders/order items/payments; no duplicated receipt totals are stored.
 
 Migration 004 adds `receipt_email_deliveries`, keyed by order ID, to record receipt recipients, delivery status, attempt counts, timestamps and sanitized failure codes.
+
+Migration 005 adds `product_price_history`, recording product ID, previous/new prices in cents, administrator actor and timestamp. Price changes do not alter order item snapshots or inventory quantities.

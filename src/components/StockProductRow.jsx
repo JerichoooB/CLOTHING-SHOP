@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { api } from "../lib/api";
 import "./StockProductRow.css";
+import ProductPriceEditor from "./ProductPriceEditor";
 
 export default function StockProductRow({
   item,
@@ -47,11 +48,12 @@ export default function StockProductRow({
       <td data-label="Product">
         <strong>{item.name}</strong>
         <small>
-          Product ID {item.productId} · {item.sku}
+          {item.category} · Product ID {item.productId} · {item.sku}
         </small>
         <small>
           {total} units across {item.variants.length} sizes
         </small>
+        <ProductPriceEditor item={item} onSaved={onSaved} />
       </td>
       <td data-label="Select size">
         <select

@@ -149,6 +149,21 @@ export async function initializeDatabase(database = pool) {
       );
       await client.query("INSERT INTO schema_migrations(version) VALUES(4)");
     }
+    const pricing = await client.query(
+      "SELECT 1 FROM schema_migrations WHERE version=5",
+    );
+    if (!pricing.rowCount) {
+      await client.query(
+        await readFile(
+          new URL(
+            "../database/migrations/005_price_history.sql",
+            import.meta.url,
+          ),
+          "utf8",
+        ),
+      );
+      await client.query("INSERT INTO schema_migrations(version) VALUES(5)");
+    }
   });
 }
 export async function importLegacyAccounts(

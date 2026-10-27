@@ -19,6 +19,7 @@ const optionalTables = [
   "password_reset_tokens",
   "password_reset_limits",
   "receipt_email_deliveries",
+  "product_price_history",
 ];
 const quote = pg.escapeIdentifier;
 
@@ -98,6 +99,15 @@ export async function restoreDatabase(pool, snapshot) {
       await readFile(
         new URL(
           "../../database/migrations/004_receipt_email.sql",
+          import.meta.url,
+        ),
+        "utf8",
+      ),
+    );
+    await client.query(
+      await readFile(
+        new URL(
+          "../../database/migrations/005_price_history.sql",
           import.meta.url,
         ),
         "utf8",

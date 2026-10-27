@@ -1,0 +1,87 @@
+.product-price-display {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 13px;
+}
+.product-price-display > span {
+  font-size: 14px;
+  font-weight: 500;
+}
+.product-price-display > button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  color: #738464;
+  min-height: 30px;
+}
+.product-price-display > button svg {
+  width: 12px;
+  height: 12px;
+}
+.product-price-editor {
+  margin-top: 16px;
+  max-width: 300px;
+}
+.product-price-editor > label {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 7px;
+}
+.product-price-editor > div {
+  display: flex;
+  align-items: stretch;
+  gap: 5px;
+}
+.product-price-editor input {
+  width: 100%;
+  min-width: 75px;
+  max-width: 115px;
+  font-size: 13px;
+  background: var(--paper);
+  border: 1px solid #cfd7c2;
+  padding: 8px;
+}
+.product-price-editor button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border-radius: 4px;
+  padding: 7px 9px;
+  font-size: 10px;
+}
+.product-price-editor button svg {
+  width: 13px;
+  height: 13px;
+}
+.product-price-editor .price-save {
+  background: #394b30;
+  color: white;
+}
+.product-price-editor .price-cancel {
+  border: 1px solid var(--line);
+}
+.product-price-editor > small {
+  font-size: 10px;
+}
+.product-price-editor > .auth-error {
+  margin-top: 10px;
+}
+@media (max-width: 700px) {
+  .product-price-editor input {
+    font-size: 16px;
+    min-height: 44px;
+    max-width: none;
+  }
+  .product-price-editor button {
+    min-height: 44px;
+  }
+  .product-price-display > button {
+    min-height: 36px;
+    font-size: 11px;
+  }
+}

@@ -443,7 +443,7 @@ export function adminRouter(database) {
         values,
       );
       const result = await database.query(
-        `SELECT p.id::text,p.id AS "productId",p.sku,p.name,
+        `SELECT p.id::text,p.id AS "productId",p.sku,p.name,p.category,p.price_cents AS "priceCents",
         (SELECT json_agg(json_build_object('id',v.id::text,'sku',v.sku,'size',v.size,
           'stock',v.stock,'lowStockThreshold',v.low_stock_threshold) ORDER BY v.id)
           FROM product_variants v WHERE v.product_id=p.id AND v.active) AS variants
@@ -476,6 +476,61 @@ export function adminRouter(database) {
       page,
       pageSize,
     });
+  });
+  router.patch("/products/:id/price", async (req, res) => {
+    const id = Number(req.params.id),
+      { expectedPriceCents } = req.body || {};
+    const raw =
+      typeof req.body?.price === "string" || typeof req.body?.price === "number"
+        ? String(req.body.price).trim()
+        : "";
+    if (
+      !/^\d+$/.test(req.params.id) ||
+      !Number.isSafeInteger(id) ||
+      id > 2147483647
+    )
+      fail(400, "Invalid product ID.");
+    if (!/^\d{1,3}(\.\d{1,2})?$/.test(raw))
+      fail(
+        400,
+        "Enter a price from ₱150 to ₱700, with up to two decimal places.",
+      );
+    const [whole, fraction = ""] = raw.split(".");
+    const cents = Number(whole) * 100 + Number(fraction.padEnd(2, "0"));
+    if (
+      cents < 15000 ||
+      cents > 70000 ||
+      !Number.isInteger(expectedPriceCents) ||
+      expectedPriceCents < 0
+    )
+      fail(
+        400,
+        "Enter a price from ₱150 to ₱700 and refresh the current price before saving.",
+      );
+    const result = await transaction(database, async (client) => {
+      const found = await client.query(
+        "SELECT price_cents FROM products WHERE id=$1 AND active FOR UPDATE",
+        [id],
+      );
+      if (!found.rowCount) fail(404, "Product not found.");
+      const previous = found.rows[0].price_cents;
+      if (previous !== expectedPriceCents)
+        fail(
+          409,
+          "This price changed while you were editing. Refresh the page and try again.",
+        );
+      if (previous === cents) return { changed: false, priceCents: cents };
+      await client.query("UPDATE products SET price_cents=$1 WHERE id=$2", [
+        cents,
+        id,
+      ]);
+      await client.query(
+        "INSERT INTO product_price_history(product_id,previous_price_cents,new_price_cents,actor_id) VALUES($1,$2,$3,$4)",
+        [id, previous, cents, req.user.id],
+      );
+      return { changed: true, priceCents: cents };
+    });
+    res.json({ productId: id, ...result });
   });
   router.post("/inventory/:id/adjust", async (req, res) => {
     const { delta } = req.body || {},
