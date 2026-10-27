@@ -125,6 +125,10 @@ export default function Checkout({ onNavigate }) {
             : "This order was cancelled and its demo payment was reversed. No money was charged."}
         </p>
         <OrderCard order={confirmed} />
+        <p className="form-note">
+          Open View receipt to print your receipt, check email delivery, or send
+          a copy to your account email.
+        </p>
         <button className="primary" onClick={() => onNavigate("Orders")}>
           VIEW MY ORDERS ⟶
         </button>

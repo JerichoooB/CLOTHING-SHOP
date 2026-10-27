@@ -7,7 +7,11 @@ import { sameOrigin } from "./security.js";
 import { listProducts } from "./products.js";
 import { commerceRouter, adminRouter } from "./orders.js";
 import { createPasswordResetRouter } from "./password-reset.js";
-export function createApp({ pool = defaultPool, passwordReset } = {}) {
+export function createApp({
+  pool = defaultPool,
+  passwordReset,
+  receiptEmail,
+} = {}) {
   const app = express();
   app.disable("x-powered-by");
   app.use(express.json({ limit: "32kb" }));
@@ -30,7 +34,7 @@ export function createApp({ pool = defaultPool, passwordReset } = {}) {
       ? res.json(products[0])
       : res.status(404).json({ error: "Product not found" });
   });
-  app.use("/api", commerceRouter(pool));
+  app.use("/api", commerceRouter(pool, receiptEmail));
   app.use("/api", (_req, res) => res.status(404).json({ error: "Not found" }));
   const dist = fileURLToPath(new URL("../dist", import.meta.url));
   app.use(express.static(dist));

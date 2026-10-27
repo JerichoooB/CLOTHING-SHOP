@@ -15,7 +15,11 @@ const tables = [
   "order_status_history",
   "inventory_movements",
 ];
-const optionalTables = ["password_reset_tokens", "password_reset_limits"];
+const optionalTables = [
+  "password_reset_tokens",
+  "password_reset_limits",
+  "receipt_email_deliveries",
+];
 const quote = pg.escapeIdentifier;
 
 export async function snapshotDatabase(pool) {
@@ -85,6 +89,15 @@ export async function restoreDatabase(pool, snapshot) {
       await readFile(
         new URL(
           "../../database/migrations/003_password_reset.sql",
+          import.meta.url,
+        ),
+        "utf8",
+      ),
+    );
+    await client.query(
+      await readFile(
+        new URL(
+          "../../database/migrations/004_receipt_email.sql",
           import.meta.url,
         ),
         "utf8",

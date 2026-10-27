@@ -4,6 +4,7 @@ import { api } from "../lib/api";
 import Logo from "./Logo";
 import { statusLabels } from "./OrderCard";
 import "./Receipt.css";
+import ReceiptEmail from "./ReceiptEmail";
 const money = (value) =>
   new Intl.NumberFormat("en-PH", { style: "currency", currency: "PHP" }).format(
     value,
@@ -55,6 +56,12 @@ export default function Receipt({ orderId }) {
           <Printer aria-hidden="true" /> PRINT / SAVE PDF
         </button>
       </div>
+      <ReceiptEmail
+        order={order}
+        onDelivery={(delivery) =>
+          setOrder((current) => ({ ...current, receiptEmail: delivery }))
+        }
+      />
       <article
         className="receipt-sheet"
         aria-label={`Receipt for ${order.number}`}

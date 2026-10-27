@@ -3,6 +3,7 @@ import { randomUUID, createHash } from "node:crypto";
 import { transaction } from "./db.js";
 import { requireUser, requireAdmin, fail } from "./security.js";
 import { salesAnalytics } from "./analytics.js";
+import { deliverReceipt, receiptEmailStatus } from "./receipt-email.js";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 export const transitions = {
   pending: ["processing", "cancelled"],
@@ -119,6 +120,7 @@ function publicQuote(quote) {
 const orderSelect = `SELECT o.id,o.order_number,o.user_id,o.status,o.subtotal_cents,o.shipping_cents,o.total_cents,o.currency,o.shipping_address,o.tracking_number,o.created_at,o.updated_at,u.name AS customer_name,u.email AS customer_email,pay.status AS payment_status,pay.reference AS payment_reference,pay.is_simulated,
  COALESCE((SELECT json_agg(json_build_object('id',i.id::text,'productId',i.product_id,'variantId',i.variant_id::text,'name',i.product_name,'sku',i.sku,'size',i.size,'qty',i.quantity,'unitPrice',i.unit_price_cents/100.0,'lineTotal',i.line_total_cents/100.0,'image',p.image,'cell',p.image_cell) ORDER BY i.id) FROM order_items i JOIN products p ON p.id=i.product_id WHERE i.order_id=o.id),'[]'::json) AS items,
  COALESCE((SELECT json_agg(json_build_object('id',h.id::text,'previousStatus',h.previous_status,'status',h.status,'note',h.note,'createdAt',h.created_at) ORDER BY h.id) FROM order_status_history h WHERE h.order_id=o.id),'[]'::json) AS history
+ ,(SELECT json_build_object('status',d.status,'recipient',d.recipient,'sentAt',d.sent_at,'lastAttemptAt',d.last_attempt_at) FROM receipt_email_deliveries d WHERE d.order_id=o.id) AS receipt_email
  FROM orders o JOIN users u ON u.id=o.user_id JOIN payments pay ON pay.order_id=o.id`;
 function orderFrom(row) {
   return {
@@ -142,13 +144,14 @@ function orderFrom(row) {
     },
     items: row.items,
     history: row.history,
+    receiptEmail: row.receipt_email || { status: "not_sent" },
   };
 }
 async function getOrder(database, id) {
   const result = await database.query(orderSelect + " WHERE o.id=$1", [id]);
   return result.rows[0] ? orderFrom(result.rows[0]) : null;
 }
-export function commerceRouter(database) {
+export function commerceRouter(database, receiptEmail) {
   const router = Router();
   router.use(requireUser);
   router.post("/checkout/quote", async (req, res) =>
@@ -229,10 +232,23 @@ export function commerceRouter(database) {
         "INSERT INTO order_status_history(order_id,status,actor_id,note) VALUES($1,'pending',$2,'Order placed; demo payment approved. No money charged.')",
         [id, req.user.id],
       );
+      await client.query(
+        "INSERT INTO receipt_email_deliveries(order_id,recipient) VALUES($1,$2)",
+        [id, req.user.email],
+      );
       return { id, replayed: false };
     });
+    const order = await getOrder(database, result.id);
+    try {
+      order.receiptEmail = await deliverReceipt(database, order, receiptEmail);
+    } catch {
+      order.receiptEmail = { status: "failed" };
+      console.error(
+        "Clover receipt email could not be recorded; order remains confirmed.",
+      );
+    }
     return res.status(result.replayed ? 200 : 201).json({
-      order: await getOrder(database, result.id),
+      order,
       replayed: result.replayed,
     });
   });
@@ -257,6 +273,26 @@ export function commerceRouter(database) {
     );
     if (!found.rowCount) fail(404, "Receipt not found.");
     return res.json({ order: await getOrder(database, req.params.id) });
+  });
+  router.post("/orders/:id/receipt/email", async (req, res) => {
+    if (!UUID.test(req.params.id)) fail(404, "Receipt not found.");
+    const found = await database.query(
+      "SELECT id FROM orders WHERE id=$1 AND (user_id=$2 OR $3::boolean)",
+      [req.params.id, req.user.id, req.user.role === "admin"],
+    );
+    if (!found.rowCount) fail(404, "Receipt not found.");
+    const delivery = await receiptEmailStatus(database, req.params.id);
+    if (
+      delivery.lastAttemptAt &&
+      Date.now() - new Date(delivery.lastAttemptAt).getTime() < 60000
+    ) {
+      res.set("Retry-After", "60");
+      fail(429, "Please wait one minute before emailing this receipt again.");
+    }
+    const order = await getOrder(database, req.params.id);
+    return res.json({
+      delivery: await deliverReceipt(database, order, receiptEmail, true),
+    });
   });
   router.get("/orders/:id", async (req, res) => {
     if (!UUID.test(req.params.id)) fail(404, "Order not found.");

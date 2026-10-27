@@ -37,3 +37,5 @@ Foreign keys, unique email/SKU/size/request-ID constraints, nonnegative stock/am
 The SQL schema supports only the simulated payment provider in this version. Approved means the **demo payment** passed, not that money was collected. Production payment gateways and shipment integrations are outside this implementation.
 
 Password recovery (migration 003) adds `password_reset_tokens` (hashed token, user, expiry, usage timestamp) and `password_reset_limits` (hashed request key, rolling window start, attempts). Order receipts are derived from stored orders/order items/payments; no duplicated receipt totals are stored.
+
+Migration 004 adds `receipt_email_deliveries`, keyed by order ID, to record receipt recipients, delivery status, attempt counts, timestamps and sanitized failure codes.

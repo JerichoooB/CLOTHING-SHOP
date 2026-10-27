@@ -129,3 +129,5 @@ Saved pieces have their own page, persist in browser storage, and sync between t
 ### Receipts and password recovery
 
 Order confirmation and history include a private, printable receipt, with browser Save as PDF support. Receipt totals use immutable order snapshots and identify simulated payments. Password recovery is available from the login dialog and uses single-use 15-minute emailed links, hashed token storage, persistent request limits, and session revocation after a password change. Configure `GMAIL_USER`, `GMAIL_APP_PASSWORD`, and `PUBLIC_APP_URL` privately in Vercel Production; see DEPLOYMENT.md for setup and live delivery checks. Migration 003 adds recovery tokens/rate limits while preserving existing accounts and orders.
+
+Receipt emails now send automatically after new checkouts, using the configured Gmail sender and the customer's registered email as recipient. Existing orders can be emailed from View receipt. Delivery status and resend cooldowns are recorded in `receipt_email_deliveries` (migration 004); failed email never reverses or duplicates the order. Automated email checks capture the sender and do not verify real inbox delivery.

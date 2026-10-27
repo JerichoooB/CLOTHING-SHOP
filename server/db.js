@@ -134,6 +134,21 @@ export async function initializeDatabase(database = pool) {
       );
       await client.query("INSERT INTO schema_migrations(version) VALUES(3)");
     }
+    const receiptEmail = await client.query(
+      "SELECT 1 FROM schema_migrations WHERE version=4",
+    );
+    if (!receiptEmail.rowCount) {
+      await client.query(
+        await readFile(
+          new URL(
+            "../database/migrations/004_receipt_email.sql",
+            import.meta.url,
+          ),
+          "utf8",
+        ),
+      );
+      await client.query("INSERT INTO schema_migrations(version) VALUES(4)");
+    }
   });
 }
 export async function importLegacyAccounts(

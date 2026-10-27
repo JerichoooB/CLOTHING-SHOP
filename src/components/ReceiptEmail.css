@@ -1,0 +1,83 @@
+.receipt-email-panel {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  background: #eef1e6;
+  border: 1px solid #dce4ce;
+  border-radius: 6px;
+  padding: 18px;
+  margin-bottom: 24px;
+}
+.receipt-email-copy {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  min-width: 0;
+  flex: 1;
+}
+.receipt-email-copy strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+}
+.receipt-email-copy p {
+  font-size: 11px;
+  color: #637454;
+  margin-top: 6px;
+  overflow-wrap: anywhere;
+}
+.receipt-email-copy small {
+  display: block;
+  font-size: 10px;
+  color: #7d8a70;
+  line-height: 1.7;
+  margin-top: 5px;
+}
+.receipt-email-copy > div {
+  min-width: 0;
+}
+.receipt-email-icon svg {
+  width: 20px;
+  height: 20px;
+  color: #7b8d64;
+}
+.receipt-email-panel > button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 13px;
+  min-height: 40px;
+  border: 1px solid #a7b892;
+  background: #f8faf3;
+  border-radius: 4px;
+  font-size: 9px;
+  white-space: nowrap;
+}
+.receipt-email-panel > button svg {
+  width: 14px;
+  height: 14px;
+}
+.receipt-email-error {
+  width: 100%;
+  font-size: 11px;
+  color: #a05c44;
+}
+@media (max-width: 600px) {
+  .receipt-email-panel {
+    align-items: stretch;
+  }
+  .receipt-email-panel > button {
+    width: 100%;
+  }
+  .receipt-email-copy {
+    flex-basis: 100%;
+  }
+}
+@media print {
+  .receipt-email-panel {
+    display: none !important;
+  }
+}
