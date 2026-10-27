@@ -96,7 +96,7 @@ export default function WomenFilters({
             ["under", "₱150 – ₱299"],
             ["mid", "₱300 – ₱449"],
             ["upper", "₱450 – ₱599"],
-            ["premium", "₱600 – ₱700"],
+            ["premium", "₱600 and above"],
           ].map(([v, t]) => (
             <label className="price-option" key={v}>
               <input

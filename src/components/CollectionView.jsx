@@ -33,7 +33,7 @@ export default function CollectionView({
               : priceFilter === "upper"
                 ? p.price >= 450 && p.price < 600
                 : priceFilter === "premium"
-                  ? p.price >= 600 && p.price <= 700
+                  ? p.price >= 600
                   : false)) &&
         p.name.toLowerCase().includes(query.toLowerCase()),
     )

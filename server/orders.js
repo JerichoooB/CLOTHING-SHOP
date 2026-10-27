@@ -4,6 +4,7 @@ import { transaction } from "./db.js";
 import { requireUser, requireAdmin, fail } from "./security.js";
 import { salesAnalytics } from "./analytics.js";
 import { deliverReceipt, receiptEmailStatus } from "./receipt-email.js";
+const MAX_CENTS = 2147483647;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 export const transitions = {
   pending: ["processing", "cancelled"],
@@ -96,6 +97,11 @@ async function quoteItems(client, items, lock = false) {
       0,
     ),
     shippingCents = subtotalCents >= 150000 ? 0 : 10000;
+  if (subtotalCents + shippingCents > MAX_CENTS)
+    fail(
+      400,
+      "This order total is too large. Reduce the quantities and try again.",
+    );
   return {
     lines,
     subtotalCents,
@@ -490,22 +496,22 @@ export function adminRouter(database) {
       id > 2147483647
     )
       fail(400, "Invalid product ID.");
-    if (!/^\d{1,3}(\.\d{1,2})?$/.test(raw))
+    if (!/^\d{1,8}(\.\d{1,2})?$/.test(raw))
       fail(
         400,
-        "Enter a price from ₱150 to ₱700, with up to two decimal places.",
+        "Enter a price of at least ₱150, with up to two decimal places.",
       );
     const [whole, fraction = ""] = raw.split(".");
     const cents = Number(whole) * 100 + Number(fraction.padEnd(2, "0"));
     if (
       cents < 15000 ||
-      cents > 70000 ||
+      cents > MAX_CENTS ||
       !Number.isInteger(expectedPriceCents) ||
       expectedPriceCents < 0
     )
       fail(
         400,
-        "Enter a price from ₱150 to ₱700 and refresh the current price before saving.",
+        "Enter a price between ₱150 and ₱21,474,836.47 and refresh the current price before saving.",
       );
     const result = await transaction(database, async (client) => {
       const found = await client.query(

@@ -87,7 +87,7 @@ test("price migration updates existing products to PHP150–700 without changing
   }
 });
 
-test("web price editing requires admin, enforces PHP150–700, records changes and preserves order snapshots", async () => {
+test("web price editing requires admin, accepts prices above PHP700, records changes and preserves order snapshots", async () => {
   const f = await fixture();
   try {
     const admin = await f.register("Price Admin", "price-admin@example.test"),
@@ -108,7 +108,7 @@ test("web price editing requires admin, enforces PHP150–700, records changes a
     );
     for (const price of [
       "149.99",
-      "700.01",
+      "21474836.48",
       "-20",
       "350.001",
       "1e2",
@@ -210,11 +210,19 @@ test("web price editing requires admin, enforces PHP150–700, records changes a
       cookie: admin.cookie,
     });
     assert.equal(bounds.status, 200);
+    const higher = await f.api(path, {
+      method: "PATCH",
+      cookie: admin.cookie,
+      body: { price: "1250.50", expectedPriceCents: 70000 },
+    });
+    assert.equal(higher.status, 200);
+    assert.equal(higher.data.priceCents, 125050);
+    assert.equal((await f.api("/api/products/0")).data.price, 1250.5);
     assert.equal(
       (
         await f.api(path, {
           method: "PATCH",
-          body: { price: "150", expectedPriceCents: 70000 },
+          body: { price: "150", expectedPriceCents: 125050 },
           cookie: admin.cookie,
         })
       ).status,
@@ -249,6 +257,36 @@ test("concurrent admin edits cannot silently overwrite the same product price", 
         )
       ).rows[0].n,
       1,
+    );
+  } finally {
+    await f.close();
+  }
+});
+
+test("large supported product prices fail oversized checkouts cleanly rather than overflowing database totals", async () => {
+  const f = await fixture();
+  try {
+    const admin = await f.register();
+    await f.database.query("UPDATE users SET role='admin' WHERE id=$1", [
+      admin.user.id,
+    ]);
+    const update = await f.api("/api/admin/products/0/price", {
+      method: "PATCH",
+      cookie: admin.cookie,
+      body: { price: "21474836.47", expectedPriceCents: 35000 },
+    });
+    assert.equal(update.status, 200);
+    const quote = await f.api("/api/checkout/quote", {
+      method: "POST",
+      cookie: admin.cookie,
+      body: { items: [{ id: 0, size: "M", qty: 2 }] },
+    });
+    assert.equal(quote.status, 400);
+    assert.match(quote.data.error, /total is too large/);
+    assert.equal(
+      (await f.database.query("SELECT count(*)::int AS n FROM orders")).rows[0]
+        .n,
+      0,
     );
   } finally {
     await f.close();

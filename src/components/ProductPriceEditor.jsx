@@ -69,7 +69,6 @@ export default function ProductPriceEditor({ item, onSaved }) {
           inputMode="decimal"
           required
           min={150}
-          max={700}
           step="0.01"
           value={price}
           readOnly={pending}
@@ -97,7 +96,7 @@ export default function ProductPriceEditor({ item, onSaved }) {
           <X aria-hidden="true" />
         </button>
       </div>
-      <small>₱150–₱700 · Applies to all sizes</small>
+      <small>Minimum ₱150 · Applies to all sizes</small>
       {error && (
         <p className="auth-error" role="alert">
           {error}
