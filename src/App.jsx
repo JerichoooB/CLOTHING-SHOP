@@ -52,7 +52,7 @@ export default function App() {
     };
   }, [setModal]);
   useEffect(() => {
-    document.title = `${page === "ResetPassword" ? "Reset password" : page} — CLOVER`;
+    document.title = "Clover";
   }, [page]);
   function go(name, search = "") {
     setQuery(search);
