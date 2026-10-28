@@ -107,7 +107,7 @@ test("web price editing requires admin, accepts prices above PHP700, records cha
       403,
     );
     for (const price of [
-      "149.99",
+      "0.001",
       "21474836.48",
       "-20",
       "350.001",
@@ -126,6 +126,20 @@ test("web price editing requires admin, accepts prices above PHP700, records cha
         ).status,
         400,
       );
+    for (const [price, cents, previous] of [
+      ["149.99", 14999, 35000],
+      ["0.01", 1, 14999],
+      ["350", 35000, 1],
+    ]) {
+      const result = await f.api(path, {
+        method: "PATCH",
+        body: { price, expectedPriceCents: previous },
+        cookie: admin.cookie,
+      });
+      assert.equal(result.status, 200);
+      assert.equal(result.data.priceCents, cents);
+    }
+    await f.database.query("DELETE FROM product_price_history");
     const old = await f.api("/api/checkout", {
       method: "POST",
       cookie: customer.cookie,

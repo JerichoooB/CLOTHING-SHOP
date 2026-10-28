@@ -499,19 +499,19 @@ export function adminRouter(database) {
     if (!/^\d{1,8}(\.\d{1,2})?$/.test(raw))
       fail(
         400,
-        "Enter a price of at least ₱150, with up to two decimal places.",
+        "Enter a positive price with up to two decimal places.",
       );
     const [whole, fraction = ""] = raw.split(".");
     const cents = Number(whole) * 100 + Number(fraction.padEnd(2, "0"));
     if (
-      cents < 15000 ||
+      cents < 1 ||
       cents > MAX_CENTS ||
       !Number.isInteger(expectedPriceCents) ||
       expectedPriceCents < 0
     )
       fail(
         400,
-        "Enter a price between ₱150 and ₱21,474,836.47 and refresh the current price before saving.",
+        "Enter a price between ₱0.01 and ₱21,474,836.47 and refresh the current price before saving.",
       );
     const result = await transaction(database, async (client) => {
       const found = await client.query(
