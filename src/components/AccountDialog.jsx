@@ -15,6 +15,7 @@ import {
 import Asset from "./Asset";
 import PasswordField from "./PasswordField";
 import ForgotPassword from "./ForgotPassword";
+import usePanelTransition from "../hooks/usePanelTransition";
 import { api } from "../lib/api";
 import { useStore } from "../context/StoreContext";
 import "./AccountDialog.css";
@@ -25,8 +26,8 @@ export default function AccountDialog({ onNavigate, initialMode }) {
     ),
     [error, setError] = useState(""),
     [pending, setPending] = useState(false),
-    [signedOut, setSignedOut] = useState(false),
-    [arriving, setArriving] = useState(false);
+    [signedOut, setSignedOut] = useState(false);
+  const { stageRef, change, mounted } = usePanelTransition();
   const inFlight = useRef(false);
   const errorRef = useRef(null);
   const headingRef = useRef(null);
@@ -34,18 +35,26 @@ export default function AccountDialog({ onNavigate, initialMode }) {
     if (error) errorRef.current?.focus();
   }, [error]);
   useEffect(() => {
-    headingRef.current?.focus();
-  }, [user?.id, signedOut, arriving]);
-  useEffect(() => {
-    if (!arriving) return;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const timer = window.setTimeout(() => setArriving(false), reduced ? 0 : 950);
-    return () => window.clearTimeout(timer);
-  }, [arriving]);
+    if (!authLoading) headingRef.current?.focus({ preventScroll: true });
+  }, [authLoading]);
+  const view = authLoading
+    ? "loading"
+    : user
+      ? "dashboard"
+      : signedOut
+        ? "signedout"
+        : mode;
+  const wrap = (content) => (
+    <div ref={stageRef} className="account-stage" data-account-view={view}>
+      {content}
+    </div>
+  );
   function switchMode(next) {
     if (inFlight.current) return;
-    setMode(next);
-    setError("");
+    void change(() => {
+      setMode(next);
+      setError("");
+    });
   }
   async function submit(event) {
     event.preventDefault();
@@ -67,18 +76,24 @@ export default function AccountDialog({ onNavigate, initialMode }) {
           password: data.password,
         }),
       });
-      setArriving(true);
-      setUser(result.user);
+      if (!mounted.current) {
+        setUser(result.user);
+        return;
+      }
+      await change(() => {
+        setUser(result.user);
+        if (mounted.current) setPending(false);
+      });
       notify(
         mode === "register"
           ? "Your account is ready. Welcome to Clover!"
           : "Welcome back to Clover.",
       );
     } catch (err) {
-      setError(err.message);
+      if (mounted.current) setError(err.message);
     } finally {
       inFlight.current = false;
-      setPending(false);
+      if (mounted.current) setPending(false);
     }
   }
   async function logout() {
@@ -88,35 +103,30 @@ export default function AccountDialog({ onNavigate, initialMode }) {
     setPending(true);
     try {
       await api("/api/auth/logout", { method: "POST" });
-      setUser(null);
-      setSignedOut(true);
-      setMode("login");
+      if (!mounted.current) {
+        setUser(null);
+        return;
+      }
+      await change(() => {
+        setUser(null);
+        if (mounted.current) {
+          setSignedOut(true);
+          setMode("login");
+        }
+      });
       notify("You’re signed out.");
     } catch (err) {
-      setError(err.message);
+      if (mounted.current) setError(err.message);
     } finally {
       inFlight.current = false;
-      setPending(false);
+      if (mounted.current) setPending(false);
     }
   }
   if (authLoading)
-    return (
+    return wrap(
       <p role="status" className="account-loading">
         Checking your account…
-      </p>
-    );
-  if (user && arriving)
-    return (
-      <div className="account-arrival" role="status" aria-live="polite">
-        <span className="account-arrival-mark" aria-hidden="true">
-          <img src="/images/clover-five-leaf.svg" alt="" />
-          <CheckCircle2 />
-        </span>
-        <p className="eyebrow">YOU’RE IN</p>
-        <h2>Welcome{mode === "register" ? " to Clover" : " back"}, {user.name.split(" ")[0]}.</h2>
-        <p>Opening your Clover dashboard…</p>
-        <span className="account-arrival-progress" aria-hidden="true" />
-      </div>
+      </p>,
     );
   if (user) {
     const initials = user.name
@@ -126,7 +136,7 @@ export default function AccountDialog({ onNavigate, initialMode }) {
       .map((part) => part[0])
       .join("")
       .toUpperCase();
-    return (
+    return wrap(
       <div className="account-dashboard" aria-busy={pending}>
         <div className="account-cover">
           <Asset editorial cell={5} label="Clover fabric detail" />
@@ -230,11 +240,11 @@ export default function AccountDialog({ onNavigate, initialMode }) {
             Need help with your account? Contact us
           </button>
         </div>
-      </div>
+      </div>,
     );
   }
   if (signedOut)
-    return (
+    return wrap(
       <div className="account-signedout">
         <span className="account-success-icon">
           <CheckCircle2 aria-hidden="true" />
@@ -252,20 +262,20 @@ export default function AccountDialog({ onNavigate, initialMode }) {
         </button>
         <button
           className="account-login-again"
-          onClick={() => setSignedOut(false)}
+          onClick={() => change(() => setSignedOut(false))}
         >
           Log in again
         </button>
-      </div>
+      </div>,
     );
   if (mode === "forgot")
-    return (
+    return wrap(
       <ForgotPassword
         onBack={() => switchMode("login")}
         onNavigate={onNavigate}
-      />
+      />,
     );
-  return (
+  return wrap(
     <div className="auth-layout">
       <aside className="auth-editorial" aria-label="Clover essentials">
         <Asset
@@ -430,6 +440,6 @@ export default function AccountDialog({ onNavigate, initialMode }) {
           Your account, your orders. Always in one place.
         </p>
       </div>
-    </div>
+    </div>,
   );
 }

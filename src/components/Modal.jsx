@@ -28,6 +28,7 @@ export default function Modal({
         ].filter(
           (element) =>
             !element.disabled &&
+            !element.closest("[inert]") &&
             element.tabIndex >= 0 &&
             element.getClientRects().length > 0,
         );

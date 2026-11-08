@@ -1,44 +1,170 @@
 /* Short, compositor-friendly feedback; no delays before controls become usable. */
 @media (prefers-reduced-motion: no-preference) {
-  .site > main { animation: clover-enter 320ms ease-out both; }
-  .shade { animation: clover-fade 180ms ease-out both; }
-  .shade > .modal { animation: clover-enter 260ms cubic-bezier(.2,.8,.2,1) both; }
-  .shade > .drawer { animation: clover-drawer 280ms cubic-bezier(.2,.8,.2,1) both; }
-  .primary, .add-small, .account-action-cards > button {
-    transition: transform 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+  .site > main {
+    animation: clover-enter 320ms ease-out both;
   }
-  .primary:active:not(:disabled), .add-small:active:not(:disabled) { transform: scale(.97); }
-  .product-image .asset { transition: transform 350ms ease, filter 300ms ease; }
-  .favorite.liked svg { animation: clover-pop 300ms ease-out; }
-  .header-actions .count, .count { animation: clover-pop 300ms ease-out; }
-  .is-added { animation: clover-pop 300ms ease-out; }
+  .shade {
+    animation: clover-fade 180ms ease-out both;
+  }
+  .shade > .modal {
+    animation: clover-enter 260ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+  .shade > .drawer {
+    animation: clover-drawer 280ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+  .primary,
+  .add-small,
+  .account-action-cards > button {
+    transition:
+      transform 180ms ease,
+      background-color 180ms ease,
+      box-shadow 180ms ease;
+  }
+  .primary:active:not(:disabled),
+  .add-small:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+  .product-image .asset {
+    transition:
+      transform 350ms ease,
+      filter 300ms ease;
+  }
+  .favorite.liked svg {
+    animation: clover-pop 300ms ease-out;
+  }
+  .header-actions .count,
+  .count {
+    animation: clover-pop 300ms ease-out;
+  }
+  .is-added {
+    animation: clover-pop 300ms ease-out;
+  }
 }
-.is-added { background-color: #35523e; color: #fff; }
+.is-added {
+  background-color: #35523e;
+  color: #fff;
+}
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 5px 14px #263b3020; }
-  .add-small:hover:not(:disabled) { transform: translateY(-2px); }
-  .product-image:hover .asset { transform: scale(1.035); }
+  .primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 14px #263b3020;
+  }
+  .add-small:hover:not(:disabled) {
+    transform: translateY(-2px);
+  }
+  .product-image:hover .asset {
+    transform: scale(1.035);
+  }
 }
 @keyframes clover-enter {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-@keyframes clover-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes clover-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 @keyframes clover-drawer {
-  from { opacity: 0; transform: translateX(28px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 @keyframes clover-pop {
-  0%, 100% { transform: scale(1); }
-  45% { transform: scale(1.16); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.16);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  .site *, .site *::before, .site *::after {
+  .site *,
+  .site *::before,
+  .site *::after {
     animation: none !important;
     transition: none !important;
     scroll-behavior: auto !important;
   }
 }
 @media print {
-  .site *, .site *::before, .site *::after { animation: none !important; transition: none !important; }
+  .site *,
+  .site *::before,
+  .site *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* View transitions interpolate the dialog's real position, width and height.
+   The old and new contents overlap; no interim screen or blank frame. */
+::view-transition {
+  pointer-events: none;
+}
+::view-transition-group(root),
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+::view-transition-group(clover-account) {
+  animation-duration: 560ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+::view-transition-image-pair(clover-account) {
+  isolation: isolate;
+  overflow: clip;
+  border-radius: 12px;
+  background: #fbfaf6;
+}
+::view-transition-old(clover-account) {
+  height: 100%;
+  object-fit: cover;
+  object-position: left top;
+  mix-blend-mode: normal;
+  animation: clover-account-out 260ms ease-out both;
+}
+::view-transition-new(clover-account) {
+  height: 100%;
+  object-fit: cover;
+  object-position: right top;
+  mix-blend-mode: normal;
+  animation: clover-account-in 480ms 80ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes clover-account-out {
+  to {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+}
+@keyframes clover-account-in {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
 }
