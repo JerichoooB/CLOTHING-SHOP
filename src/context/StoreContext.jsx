@@ -123,6 +123,7 @@ export function StoreProvider({ children }) {
         : [...old, { id: product.id, size, qty: 1 }];
     });
     notify("Added to your bag");
+    return true;
   }
   function quantity(id, size, delta) {
     const current = bagRef.current.find(

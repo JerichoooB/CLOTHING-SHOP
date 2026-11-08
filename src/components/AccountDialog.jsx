@@ -25,7 +25,8 @@ export default function AccountDialog({ onNavigate, initialMode }) {
     ),
     [error, setError] = useState(""),
     [pending, setPending] = useState(false),
-    [signedOut, setSignedOut] = useState(false);
+    [signedOut, setSignedOut] = useState(false),
+    [arriving, setArriving] = useState(false);
   const inFlight = useRef(false);
   const errorRef = useRef(null);
   const headingRef = useRef(null);
@@ -34,7 +35,13 @@ export default function AccountDialog({ onNavigate, initialMode }) {
   }, [error]);
   useEffect(() => {
     headingRef.current?.focus();
-  }, [user?.id, signedOut]);
+  }, [user?.id, signedOut, arriving]);
+  useEffect(() => {
+    if (!arriving) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const timer = window.setTimeout(() => setArriving(false), reduced ? 0 : 950);
+    return () => window.clearTimeout(timer);
+  }, [arriving]);
   function switchMode(next) {
     if (inFlight.current) return;
     setMode(next);
@@ -60,6 +67,7 @@ export default function AccountDialog({ onNavigate, initialMode }) {
           password: data.password,
         }),
       });
+      setArriving(true);
       setUser(result.user);
       notify(
         mode === "register"
@@ -96,6 +104,19 @@ export default function AccountDialog({ onNavigate, initialMode }) {
       <p role="status" className="account-loading">
         Checking your account…
       </p>
+    );
+  if (user && arriving)
+    return (
+      <div className="account-arrival" role="status" aria-live="polite">
+        <span className="account-arrival-mark" aria-hidden="true">
+          <img src="/images/clover-five-leaf.svg" alt="" />
+          <CheckCircle2 />
+        </span>
+        <p className="eyebrow">YOU’RE IN</p>
+        <h2>Welcome{mode === "register" ? " to Clover" : " back"}, {user.name.split(" ")[0]}.</h2>
+        <p>Opening your Clover dashboard…</p>
+        <span className="account-arrival-progress" aria-hidden="true" />
+      </div>
     );
   if (user) {
     const initials = user.name

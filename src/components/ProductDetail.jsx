@@ -1,8 +1,10 @@
 import { useState } from "react";
+import useAddedFeedback from "../hooks/useAddedFeedback";
 import Asset from "./Asset";
 import { money } from "../lib/catalog";
 import "./ProductDetail.css";
 export default function ProductDetail({ product: p, onAdd }) {
+  const [added, add] = useAddedFeedback(onAdd);
   const [size, setSize] = useState(
     p.variants.find((v) => v.size === "M" && v.stock > 0)?.size ??
       p.variants.find((v) => v.stock > 0)?.size ??
@@ -42,11 +44,11 @@ export default function ProductDetail({ product: p, onAdd }) {
           {p.variants.find((v) => v.size === size)?.sku}
         </p>
         <button
-          className="primary"
+          className={`primary ${added ? "is-added" : ""}`}
           disabled={(p.variants.find((v) => v.size === size)?.stock ?? 0) === 0}
-          onClick={() => onAdd(size)}
+          onClick={() => add(size)}
         >
-          ADD TO BAG ⟶
+          {added ? "ADDED TO BAG ✓" : "ADD TO BAG ⟶"}
         </button>
         <small>Free shipping from ₱1,500 · Returns within 7 days</small>
       </div>

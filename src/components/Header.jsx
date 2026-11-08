@@ -99,7 +99,7 @@ export default function Header({ page, onNavigate }) {
             onClick={() => openModal("bag")}
           >
             <ShoppingBag />
-            <span className="count">
+            <span key={bag.reduce((sum, item) => sum + item.qty, 0)} className="count">
               {bag.reduce((sum, item) => sum + item.qty, 0)}
             </span>
           </button>

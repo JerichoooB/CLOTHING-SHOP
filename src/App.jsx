@@ -63,7 +63,7 @@ export default function App() {
   return (
     <div className={`site page-${page.toLowerCase()}`}>
       <Header page={page} onNavigate={go} />
-      <main>
+      <main key={page}>
         <Page
           key={page + query}
           onNavigate={go}

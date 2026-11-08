@@ -606,3 +606,81 @@
 .auth-content h2:focus {
   outline: none;
 }
+
+/* A short confirmation bridges authentication and the account dashboard. */
+.account-arrival {
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+  background: var(--paper, #f8f7f2);
+  animation: account-arrival-in 280ms ease-out both;
+}
+.account-arrival-mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 96px;
+  height: 96px;
+  margin-bottom: 28px;
+  border-radius: 50%;
+  background: #e9eee5;
+}
+.account-arrival-mark img {
+  width: 52px;
+  height: 52px;
+  animation: account-mark-in 650ms cubic-bezier(.2,.8,.2,1) both;
+}
+.account-arrival-mark svg {
+  position: absolute;
+  right: -2px;
+  bottom: 0;
+  width: 28px;
+  height: 28px;
+  color: #35523e;
+  background: #f8f7f2;
+  border-radius: 50%;
+}
+.account-arrival > p:not(.eyebrow) { color: var(--muted); font-size: 14px; }
+.account-arrival-progress {
+  width: 140px;
+  height: 3px;
+  margin-top: 24px;
+  background: #dce3d6;
+  overflow: hidden;
+  border-radius: 3px;
+}
+.account-arrival-progress::after {
+  content: "";
+  display: block;
+  height: 100%;
+  background: #35523e;
+  transform-origin: left;
+  animation: account-progress 950ms ease-out both;
+}
+.account-dashboard { animation: account-arrival-in 420ms cubic-bezier(.2,.8,.2,1) both; }
+.account-dashboard .account-action-cards > button {
+  animation: account-arrival-in 380ms ease-out both;
+}
+.account-dashboard .account-action-cards > button:nth-child(2) { animation-delay: 60ms; }
+.account-dashboard .account-action-cards > button:nth-child(3) { animation-delay: 120ms; }
+.account-dashboard .account-action-cards > button:nth-child(4) { animation-delay: 180ms; }
+@keyframes account-arrival-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes account-mark-in {
+  from { opacity: 0; transform: scale(.8) rotate(-18deg); }
+  to { opacity: 1; transform: scale(1) rotate(0); }
+}
+@keyframes account-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@media (prefers-reduced-motion: reduce) {
+  .account-arrival,
+  .account-arrival-mark img,
+  .account-arrival-progress::after,
+  .account-dashboard,
+  .account-dashboard .account-action-cards > button { animation: none; }
+}

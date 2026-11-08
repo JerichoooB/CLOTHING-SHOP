@@ -1,4 +1,5 @@
-import { Heart, ShoppingBag } from "lucide-react";
+import { Heart, ShoppingBag, Check } from "lucide-react";
+import useAddedFeedback from "../hooks/useAddedFeedback";
 import Asset from "./Asset";
 import { money } from "../lib/catalog";
 import "./ProductCard.css";
@@ -9,6 +10,7 @@ export default function ProductCard({
   onAdd,
   onLike,
 }) {
+  const [added, add] = useAddedFeedback(onAdd);
   return (
     <article className="product">
       <div className="product-image">
@@ -43,12 +45,12 @@ export default function ProductCard({
             ))}
           </div>
           <button
-            className="add-small"
+            className={`add-small ${added ? "is-added" : ""}`}
             disabled={p.stock === 0}
             aria-label={`Add ${p.name} to bag`}
-            onClick={onAdd}
+            onClick={add}
           >
-            <ShoppingBag />
+            {added ? <Check aria-hidden="true" /> : <ShoppingBag aria-hidden="true" />}
           </button>
         </div>
       </div>
